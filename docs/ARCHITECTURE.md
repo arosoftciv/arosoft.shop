@@ -1,19 +1,33 @@
 # AroSoft — Document d'architecture
 
-> **Statut : PROPOSITION — en attente de validation. Aucune implémentation n'a commencé.**
-> Version 0.2 — 12/11/2026 — Intègre l'extension du cahier des charges « WhatsApp, cybersécurité et Chariow ».
+> **Statut : PROPOSITION — en attente de relecture finale. Aucune implémentation n'a commencé.**
+> Version 0.3 — 12/11/2026 — Intègre l'extension « WhatsApp, cybersécurité et Chariow » et les
+> décisions du questionnaire de cadrage (§0).
 >
-> Le cahier des charges initial n'est pas présent dans le dépôt. Ce document pose donc la base
-> d'architecture et y intègre l'extension. Les sections marquées **[À VALIDER]** sont des choix
-> techniques proposés qui attendent une décision.
+> Ce document est la référence du projet (pas de cahier des charges initial à intégrer).
+
+## 0. Décisions validées (questionnaire du 12/11/2026)
+
+| Sujet | Décision |
+|---|---|
+| Référence | Ce document fait foi ; pas de cahier initial à intégrer. |
+| Pile | TypeScript + Next.js + PostgreSQL. |
+| Hébergement | **Vercel** (Shop, Academy, API) + **Supabase** (PostgreSQL, Auth, Storage). |
+| Academy | **Construite dans ce projet**, héberge elle-même les contenus. |
+| Achat | **Checkout via l'API Chariow** (`POST /v1/checkout`) ; téléphone de l'acheteur collecté. |
+| Remboursements | Détection automatique par rapprochement (< 24 h) **et** révocation manuelle immédiate par un admin. |
+| Historique | Import de tous les achats Chariow + **e-mail d'invitation** aux clients importés. |
+| Reprise | **RPO 15 min / RTO 4 h** (impose la sauvegarde continue PITR de Supabase). |
+| Alertes | **E-mail et WhatsApp**. |
 
 ---
 
 ## Sommaire
 
+0. [Décisions validées](#0-décisions-validées-questionnaire-du-12112026)
 1. [Périmètre et principes](#1-périmètre-et-principes)
 2. [Vue d'ensemble](#2-vue-densemble)
-3. [Pile technique proposée [À VALIDER]](#3-pile-technique-proposée-à-valider)
+3. [Pile technique](#3-pile-technique)
 4. [Module A — Support WhatsApp](#4-module-a--support-whatsapp)
 5. [Module B — Sécurité applicative](#5-module-b--sécurité-applicative)
 6. [Module C — Intégration Chariow](#6-module-c--intégration-chariow)
@@ -49,19 +63,21 @@ flowchart LR
   subgraph Client
     B[Navigateur / mobile]
   end
-  subgraph Edge
-    CDN[CDN + WAF]
-  end
-  subgraph AroSoft
+  subgraph Vercel
+    CDN[Edge Network + Firewall/WAF]
     SHOP[AroSoft Shop]
     ACAD[AroSoft Academy]
     API[Backend API]
     WH[Récepteur Pulses]
-    Q[(File d'événements<br/>PostgreSQL)]
-    W[Workers]
-    DB[(PostgreSQL)]
-    OBJ[(Stockage objet privé)]
+    W[Worker<br/>route interne protégée]
   end
+  subgraph Supabase
+    Q[(File pgmq<br/>Supabase Queues)]
+    DB[(PostgreSQL + RLS)]
+    OBJ[(Storage, buckets privés)]
+    CRON[pg_cron + pg_net]
+  end
+  CRON -->|chaque minute, secret| W
   subgraph Chariow
     CAPI[API REST v1]
     CK[Checkout hébergé]
@@ -85,20 +101,25 @@ AroSoft Shop → Checkout Chariow → Pulse de vente → Backend AroSoft
             → Vérification API → Attribution du droit → AroSoft Academy
 ```
 
-## 3. Pile technique proposée [À VALIDER]
+## 3. Pile technique
 
-| Couche | Proposition | Justification |
+| Couche | Choix | Justification / précautions |
 |---|---|---|
-| Langage | TypeScript (Node.js LTS) | Un seul langage pour Shop, Academy et Backend ; écosystème mature pour HMAC, validation, tests. |
-| Frontend | Next.js (App Router), rendu serveur | Shop indexable (SEO), Academy protégée côté serveur ; CSP avec nonce prise en charge. |
-| Backend | Next.js Route Handlers ou service dédié (Fastify) | Fastify si le backend doit être séparé ; à trancher selon l'hébergement. |
-| Validation | Zod (schémas partagés) | Validation stricte des entrées et des payloads Chariow. |
-| Base de données | PostgreSQL 16+ via ORM à requêtes paramétrées (Drizzle ou Prisma) | Transactions, contraintes d'unicité (un seul droit par produit), file intégrée. |
-| File d'événements | **pg-boss** (file dans PostgreSQL, `SKIP LOCKED`) | Pas d'infrastructure supplémentaire ; l'enregistrement d'un Pulse et sa mise en file sont dans la **même transaction**. Redis/BullMQ possible si le volume l'exige. |
-| Stockage des ressources | Stockage objet compatible S3, bucket **privé** | Accès uniquement par URL signée de quelques minutes. |
-| Secrets | Gestionnaire de secrets de l'hébergeur (variables chiffrées) | Jamais dans le dépôt ; rotation documentée. |
-| Edge | CDN + WAF (ex. Cloudflare) | TLS, protection DDoS, règles WAF, limitation de débit en bordure. |
-| Observabilité | Logs JSON structurés + agrégateur + alertes | Avec masquage systématique des données sensibles. |
+| Langage | TypeScript (Node.js LTS) | Un seul langage pour Shop, Academy et Backend. |
+| Application | **Next.js (App Router) sur Vercel**, rendu serveur, Route Handlers pour l'API | Shop indexable, Academy protégée côté serveur, CSP à nonce via middleware. Runtime Node.js (pas Edge) pour les routes qui manipulent crypto/HMAC et la base. |
+| Validation | Zod (schémas partagés) | Entrées, réponses de l'API Chariow et payloads Pulse. |
+| Base de données | **Supabase PostgreSQL**, accès serveur via Drizzle (requêtes paramétrées) + pooler Supavisor (mode transaction) adapté au sans-serveur | Contraintes d'unicité, transactions ; **RLS activée sur toutes les tables** exposées. |
+| Authentification | **Supabase Auth utilisé uniquement côté serveur** (`@supabase/ssr`) | E-mail vérifié obligatoire ; MFA TOTP avec exigence du niveau `aal2` pour les rôles admin (contrôlée dans l'application **et** dans les politiques RLS). Cookies de session forcés `HttpOnly`, `Secure`, `SameSite` ; pas de session Supabase côté navigateur. Clé `service_role` réservée aux routes serveur et workers, jamais exposée. |
+| File d'événements | **Supabase Queues (pgmq)** | Vercel n'exécute pas de processus permanents : la file vit dans PostgreSQL. Le Pulse et son message de file sont enregistrés **dans la même transaction**. |
+| Workers | Route interne Vercel `/api/internal/worker` déclenchée **chaque minute par `pg_cron` + `pg_net`** (en-tête secret, vérifié en temps constant), plus une tentative immédiate juste après la réception du Pulse (`after()` de Next.js) | Chaque exécution traite un lot borné dans la durée maximale d'une fonction Vercel ; un message non acquitté redevient visible (délai de visibilité pgmq) et sera repris. |
+| Tâches planifiées | `pg_cron` (rapprochements, catalogue, santé des Pulses, purge) | Indépendant des limites de cron du plan Vercel. |
+| Stockage des ressources | **Supabase Storage, buckets privés** | URL signées de quelques minutes, délivrées après contrôle du droit. Vidéos volumineuses : voir §10. |
+| Secrets | Variables d'environnement chiffrées Vercel (marquées *Sensitive*) + secrets Supabase | Jamais dans le dépôt ; une valeur par environnement. |
+| Edge / WAF | **Vercel Firewall** (règles WAF gérées, règles personnalisées, limitation de débit, protection DDoS) | Remplace Cloudflare dans ce schéma (un proxy devant Vercel est déconseillé par Vercel). |
+| E-mails | Fournisseur transactionnel (ex. Resend), domaine authentifié SPF/DKIM/DMARC | Vérification d'e-mail, invitations des clients importés, alertes. |
+| Observabilité | Logs JSON structurés (Vercel Log Drains vers un agrégateur) + alertes | Masquage systématique des données sensibles. |
+
+**Plans requis :** Vercel **Pro** (durée des fonctions, règles Firewall, Log Drains) et Supabase **Pro + option PITR** (RPO 15 min). À confirmer avec le budget (§10).
 
 ## 4. Module A — Support WhatsApp
 
@@ -166,7 +187,7 @@ Priorité de résolution : surcharge produit → modèle produit global → mess
 | A01 Contrôle d'accès défaillant | Autorisation côté serveur sur chaque requête, filtrage systématique par propriétaire, tests IDOR automatisés (§5.3). |
 | A02 Mauvaise configuration | En-têtes de sécurité, CSP stricte, configuration par environnement, aucun mode debug en production. |
 | A03 Chaîne d'approvisionnement logicielle | Fichiers de verrouillage, analyse des dépendances en CI, Dependabot/Renovate, images minimales. |
-| A04 Défaillances cryptographiques | TLS 1.2+ partout, HSTS, Argon2id pour les mots de passe, chiffrement des sauvegardes. |
+| A04 Défaillances cryptographiques | TLS 1.2+ partout, HSTS, hachage des mots de passe par Supabase Auth, chiffrement des sauvegardes (`age`). |
 | A05 Injection | Requêtes paramétrées exclusivement, validation Zod, encodage des sorties. |
 | A06 Conception non sécurisée | Modélisation des menaces sur le flux de paiement (§6.9), Pulse jamais considéré comme preuve. |
 | A07 Défaillances d'authentification | MFA administrateur, limitation de débit, verrouillage progressif, sessions sécurisées. |
@@ -178,20 +199,20 @@ Priorité de résolution : surcharge produit → modèle produit global → mess
 
 | # | Exigence | Conception retenue | ASVS 5.0 |
 |---|---|---|---|
-| 1 | **Authentification robuste et MFA admin** | Mots de passe ≥ 12 caractères, vérifiés contre les listes de mots de passe compromis ; hachage **Argon2id**. **MFA obligatoire** pour tout rôle d'administration (TOTP, WebAuthn/passkeys recommandé) avec codes de secours à usage unique. Réauthentification pour les actions sensibles (changement de numéro WhatsApp, correspondances produits, remboursements, import historique). Vérification de l'e-mail obligatoire avant tout rattachement d'achat. | V6, V7 |
-| 2 | **Autorisation serveur, anti-accès horizontal** | RBAC (`student`, `support`, `admin`, `super_admin`) + contrôle de propriété. Toute requête de données client est construite avec `WHERE user_id = :session_user` côté serveur ; les identifiants exposés sont des UUID non séquentiels, mais **l'opacité n'est jamais la protection**. Les contenus Academy sont servis via un contrôle « droit actif sur ce produit ». Politiques RLS PostgreSQL en défense en profondeur sur les tables client. | V8 |
+| 1 | **Authentification robuste et MFA admin** | Supabase Auth : mots de passe ≥ 12 caractères, protection contre les mots de passe compromis activée, hachage géré par Supabase (bcrypt). **MFA TOTP obligatoire** pour tout rôle d'administration (niveau `aal2` exigé côté serveur et RLS), au moins deux facteurs TOTP enregistrés par admin pour la récupération ; procédure de réinitialisation MFA par un `super_admin`, journalisée. Réauthentification pour les actions sensibles (changement de numéro WhatsApp, correspondances produits, remboursements, import historique). Vérification de l'e-mail obligatoire avant tout rattachement d'achat. | V6, V7 |
+| 2 | **Autorisation serveur, anti-accès horizontal** | RBAC (`student`, `support`, `admin`, `super_admin`) + contrôle de propriété. Toute requête de données client est construite avec `WHERE user_id = :session_user` côté serveur ; les identifiants exposés sont des UUID non séquentiels, mais **l'opacité n'est jamais la protection**. Les contenus Academy sont servis via un contrôle « droit actif sur ce produit ». Politiques RLS Supabase en défense en profondeur sur toutes les tables (`auth.uid()`, rôle et niveau `aal2` pour l'administration) ; test CI vérifiant qu'aucune table publique n'a RLS désactivée (Supabase Advisors). | V8 |
 | 3 | **Validation stricte et SQL paramétré** | Schémas Zod en liste blanche sur chaque entrée (corps, query, en-têtes, payloads Chariow). ORM/constructeur de requêtes paramétrées ; SQL brut interdit hors fichiers revus, règle de lint bloquante. | V1, V2 |
 | 4 | **XSS, CSRF, injections** | Encodage contextuel automatique du framework ; HTML riche (descriptions produit) assaini par liste blanche (DOMPurify côté serveur). CSRF : cookies `SameSite` + jeton anti-CSRF (double soumission signée) sur toute mutation + contrôle de l'en-tête `Origin`. Le récepteur Pulse est exempté du CSRF mais protégé par signature HMAC. | V1, V3 |
-| 5 | **Cookies** | Session : `__Host-session`, `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, sans `Domain`. Administration : `SameSite=Strict`, durée courte (inactivité 15 min, absolue 8 h). Jeton de session régénéré à la connexion et à l'élévation de privilège ; révocation côté serveur. | V7, V3 |
+| 5 | **Cookies** | Session Supabase Auth gérée côté serveur avec options de cookie forcées : `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, sans `Domain` (préfixe `__Host-` si compatible). Jetons d'accès courts (1 h), rafraîchissement côté serveur. Administration : `SameSite=Strict`, durée courte (inactivité 15 min, absolue 8 h). Jeton de session régénéré à la connexion et à l'élévation de privilège ; révocation côté serveur. | V7, V3 |
 | 6 | **CSP et en-têtes** | `Content-Security-Policy` avec nonce par requête, `script-src 'nonce-…' 'strict-dynamic'`, `object-src 'none'`, `base-uri 'none'`, `frame-ancestors 'none'` (ou origines Chariow si la page de paiement est intégrée en iframe), `form-action` restreint. Plus : `Strict-Transport-Security` (preload), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` restrictive, `Cross-Origin-Opener-Policy: same-origin`. Déploiement d'abord en `Report-Only` avec collecte des violations. | V3 |
-| 7 | **Limitation de débit** | Deux niveaux : WAF en bordure + limiteur applicatif (compteurs en PostgreSQL ou Redis). Connexion : 5 essais / 15 min par compte et par IP, délai progressif ; réinitialisation de mot de passe, MFA, inscription, `POST /checkout` et API sensibles limités. Réponses identiques compte existant/inexistant (anti-énumération). | V6, V2 |
-| 8 | **Stockage privé des ressources** | Bucket privé, aucune URL publique permanente. Téléchargement/lecture via URL signée (5 min) délivrée **après** contrôle du droit. Option filigrane nominatif des PDF à étudier. | V5, V8 |
+| 7 | **Limitation de débit** | Deux niveaux : règles de limitation de débit Vercel Firewall + limites Supabase Auth + limiteur applicatif (compteurs PostgreSQL). Connexion : 5 essais / 15 min par compte et par IP, délai progressif ; réinitialisation de mot de passe, MFA, inscription, `POST /checkout` et API sensibles limités. Réponses identiques compte existant/inexistant (anti-énumération). | V6, V2 |
+| 8 | **Stockage privé des ressources** | Buckets Supabase Storage privés (politiques Storage refusant tout accès direct aux élèves), aucune URL publique permanente. Téléchargement/lecture via URL signée (5 min) délivrée par le serveur **après** contrôle du droit. Option filigrane nominatif des PDF à étudier. | V5, V8 |
 | 9 | **Secrets et clés API** | Gestionnaire de secrets ; aucune clé dans le dépôt (scan *gitleaks* en CI et en pré-commit). **Clés Chariow séparées par usage et par environnement, avec les scopes minimaux** (§6.3). Rotation documentée ; journal des accès. | V13, V11 |
 | 10 | **Sauvegardes chiffrées et restauration testée** | Voir §8.1. | V14 |
 | 11 | **Journalisation et alertes** | Voir §8.2. | V16 |
 | 12 | **Analyse des dépendances et vulnérabilités** | CI : `npm audit`/OSV-Scanner, Semgrep (SAST), Trivy (images), gitleaks, OWASP ZAP (DAST) sur l'environnement de préproduction. Les vulnérabilités critiques/élevées exploitables **bloquent** la mise en production. Renovate pour les mises à jour. | V15 |
-| 13 | **Protection réseau** | CDN/WAF devant toutes les applications (règles OWASP CRS, anti-bot sur connexion/inscription). Origine accessible uniquement depuis le CDN. Base de données et stockage non exposés sur Internet. Pare-feu : seuls 443 (via CDN) et l'administration via accès restreint. | V12, V13 |
-| 14 | **Uploads sécurisés** | Liste blanche d'extensions **et** vérification du type réel (octets magiques) ; taille maximale ; renommage aléatoire ; stockage hors racine web dans un bucket privé ; antivirus (ClamAV) avant mise à disposition ; images re-encodées (suppression des métadonnées EXIF) ; SVG refusés ou assainis ; `Content-Disposition: attachment` au téléchargement. | V5 |
+| 13 | **Protection réseau** | Vercel Firewall devant toutes les applications (règles gérées OWASP, protection bot sur connexion/inscription, blocage par pays/IP si besoin). Supabase : restrictions réseau sur la base (connexions directes limitées), SSL imposé, accès Data API restreint par RLS ; pas de clé `service_role` hors serveur. Accès aux consoles Vercel/Supabase protégé par MFA. | V12, V13 |
+| 14 | **Uploads sécurisés** | Liste blanche d'extensions **et** vérification du type réel (octets magiques) ; taille maximale ; renommage aléatoire ; stockage hors racine web dans un bucket privé ; uploads réservés aux admins avec MFA ; analyse antivirus avant mise à disposition (service à choisir en phase 4, ClamAV ne tournant pas en fonction Vercel) ; images re-encodées (suppression des métadonnées EXIF) ; SVG refusés ou assainis ; `Content-Disposition: attachment` au téléchargement. | V5 |
 | 15 | **Mises à jour et réponse aux incidents** | Voir §8.3. | V13, V16 |
 
 ### 5.3 Tests de sécurité automatisés (bloquants)
@@ -337,7 +358,8 @@ stateDiagram-v2
   granted --> revoked: remboursement / révocation
 ```
 
-- **Réception** : le récepteur ne fait que vérifier la signature, persister et mettre en file ; il répond en < 1 s. Une signature absente ou invalide → `401`, sans détail.
+- **Réception** : le récepteur (fonction Vercel, runtime Node.js, corps lu brut avant tout parsing) ne fait que vérifier la signature, persister dans `pulse_inbox` et envoyer le message pgmq dans la même transaction ; il répond en < 1 s.
+- **Traitement** : tentative immédiate via `after()`, puis consommation par le worker déclenché chaque minute par `pg_cron`. Un message lu mais non acquitté (fonction interrompue) redevient visible après son délai de visibilité. Une signature absente ou invalide → `401`, sans détail.
 - **Base indisponible** : le récepteur répond `503` ; Chariow retente pendant ~3 h. Au-delà, le rapprochement (§6.10) récupère la vente : **aucune perte définitive**.
 - **Reprises** : backoff exponentiel avec aléa (30 s → 6 h, 10 tentatives), respect de `Retry-After` sur `429`, budget de débit partagé (≤ 80 req/min pour garder une marge sous les 100 req/min).
 - **Dead letter** : visible et relançable dans le tableau de supervision ; alerte immédiate.
@@ -392,7 +414,7 @@ Faute d'événement documenté (§6.2) :
 2. Mode **simulation** d'abord : rapport (ventes trouvées, correspondances manquantes, doublons, montants) sans écriture.
 3. Exécution réelle par lots, idempotente (mêmes contraintes d'unicité que le flux temps réel, `source = import`), reprise possible au dernier curseur.
 4. Chaque vente importée passe par **les mêmes contrôles** (§6.5).
-5. Droits créés « en attente de rattachement » sur l'e-mail ; e-mail d'invitation facultatif à valider.
+5. Droits créés « en attente de rattachement » sur l'e-mail. Chaque client importé reçoit **un e-mail d'invitation** (lien d'inscription à usage unique, valable 7 jours, qui ne donne accès aux achats qu'après création du compte et vérification de l'e-mail). Envoi par lots respectant les limites du fournisseur e-mail, avec désinscription possible ; le contenu de l'e-mail ne liste pas les achats.
 6. Rapport final archivé, clé supprimée.
 
 ### 6.14 Tableau de supervision des synchronisations
@@ -429,10 +451,11 @@ Tables principales ajoutées par l'extension (noms indicatifs) :
 
 ### 8.1 Sauvegardes (exigence 10)
 
-- PostgreSQL : sauvegarde continue (WAL / PITR) + sauvegarde complète quotidienne ; **chiffrement** côté client (clé distincte de celle de l'hébergeur), copie dans une seconde région/fournisseur, rétention 30 jours + mensuelles 12 mois.
-- Stockage objet : versionnement + réplication ; suppression protégée.
-- Objectifs proposés **[À VALIDER]** : RPO ≤ 15 min, RTO ≤ 4 h.
-- **Test de restauration mensuel automatisé** dans un environnement isolé : restauration, contrôles d'intégrité (comptages, contraintes, échantillon de droits), mesure du temps ; rapport archivé. Un échec déclenche une alerte.
+- PostgreSQL : **PITR Supabase** (RPO ≤ 15 min) + sauvegardes quotidiennes Supabase.
+- Copie indépendante : export `pg_dump` quotidien par tâche planifiée (GitHub Actions), **chiffré côté client avec `age`** (clé privée hors Supabase et hors Vercel, conservée hors ligne par deux personnes), déposé chez un autre fournisseur de stockage. Rétention 30 jours + mensuelles 12 mois.
+- Supabase Storage : export régulier chiffré des buckets de contenus vers le même stockage externe.
+- Objectifs validés : **RPO ≤ 15 min, RTO ≤ 4 h**.
+- **Test de restauration mensuel automatisé** dans un environnement isolé (projet Supabase de restauration ou PostgreSQL éphémère en CI) : restauration, contrôles d'intégrité (comptages, contraintes, échantillon de droits), mesure du temps ; rapport archivé. Un échec déclenche une alerte.
 - Procédure de restauration contrôlée documentée (runbook), avec double validation pour une restauration en production.
 - Après restauration : relance du rapprochement Chariow sur la période concernée pour récupérer les ventes postérieures à la sauvegarde.
 
@@ -441,6 +464,7 @@ Tables principales ajoutées par l'extension (noms indicatifs) :
 - Logs JSON structurés avec identifiant de corrélation par requête/événement.
 - **Masquage obligatoire** par une couche centrale : e-mails (hachés ou masqués), téléphones, noms, mots de passe, jetons, cookies, en-têtes `Authorization` et `x-chariow-signature`, secrets, corps des Pulses (jamais loggés en clair ; seuls `delivery_id`, `sale_id`, type et statut le sont). Test automatisé dédié (§5.3).
 - Journal d'audit séparé (append-only) : connexions admin, MFA, changements de paramètres, correspondances, révocations, imports, relances.
+- Canaux : **e-mail** (toutes les alertes) et **WhatsApp** (alertes critiques), via l'API WhatsApp Business Cloud de Meta avec modèles de messages approuvés, envoyées à un numéro d'astreinte. Le numéro d'envoi doit être un numéro WhatsApp Business API dédié (le numéro de support peut rester sur l'application WhatsApp Business). Les messages d'alerte ne contiennent aucune donnée client, seulement le type, la gravité et un lien vers la supervision. Si l'envoi WhatsApp échoue, l'e-mail reste la voie de secours.
 - Alertes : pic d'échecs de connexion, MFA désactivée, signatures Pulse invalides, élément en dead letter, Pulse désactivé, écart de rapprochement, échec de sauvegarde/restauration, erreurs 5xx, quota API proche de la limite.
 
 ### 8.3 Mises à jour et réponse aux incidents (exigence 15)
@@ -464,4 +488,10 @@ Tables principales ajoutées par l'extension (noms indicatifs) :
 
 ## 10. Points ouverts
 
-Voir le plan de développement (`docs/PLAN_DEVELOPPEMENT.md`, section « Décisions attendues »).
+| Point | Statut |
+|---|---|
+| Budget Vercel Pro + Supabase Pro + PITR + stockage de sauvegarde externe | À confirmer |
+| Hébergement des vidéos de cours (Supabase Storage suffit pour PDF et vidéos courtes ; un service de streaming vidéo sécurisé sera proposé si les vidéos sont longues ou nombreuses) | À trancher en phase 4 |
+| Compte Meta Business + numéro WhatsApp Business API pour les alertes | À créer |
+| Service d'analyse antivirus des uploads | À choisir en phase 4 |
+| Questions au support Chariow : remboursements, environnement de test, apparence du checkout, payload des packs, `custom_metadata` dans `GET /v1/sales/{id}` | À envoyer en phase 0 |

@@ -1,7 +1,7 @@
 # AroSoft — Plan de développement
 
-> **Statut : PROPOSITION — en attente de validation. Aucune implémentation ne démarre avant accord.**
-> Version 0.2 — 12/11/2026 — Intègre l'extension « WhatsApp, cybersécurité et Chariow ».
+> **Statut : PROPOSITION — en attente de relecture finale. Aucune implémentation ne démarre avant accord.**
+> Version 0.3 — 12/11/2026 — Intègre l'extension « WhatsApp, cybersécurité et Chariow » et les décisions du questionnaire (architecture §0).
 > Référence technique : [`docs/ARCHITECTURE.md`](./ARCHITECTURE.md).
 
 ## 1. Principes de livraison
@@ -19,7 +19,8 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 
 | Livrable | Détail |
 |---|---|
-| Décisions validées | Réponses aux questions du §4 (pile, hébergement, Academy, remboursements…). |
+| Décisions validées | Fait : voir architecture §0. Reste : budget des plans Vercel Pro / Supabase Pro + PITR (§4). |
+| Comptes | Projets Vercel et Supabase (préproduction + production), MFA sur toutes les consoles, compte Meta Business pour les alertes WhatsApp. |
 | Vérifications Chariow | Création d'une clé API de test à scopes minimaux ; vérification de `custom_metadata` dans `GET /v1/sales/{id}` ; question au support : événement/statut de remboursement, environnement de test (`api.staging.chariow.com`), personnalisation visuelle du checkout, payload d'un pack. |
 | Modèle de menaces | Atelier sur le flux de paiement et l'accès aux contenus, validant la §6.9. |
 
@@ -30,10 +31,11 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 | Livrable | Détail |
 |---|---|
 | Dépôt et CI | Structure du projet, lint, tests, protection de branche ; CI de sécurité : SAST (Semgrep), dépendances (OSV/npm audit), secrets (gitleaks), images (Trivy). |
-| Environnements | Préproduction et production séparées, secrets en gestionnaire, CDN/WAF, origine non exposée, base et stockage privés. |
+| Environnements | Projets Vercel et Supabase distincts pour la préproduction et la production, variables *Sensitive*, Vercel Firewall, RLS activée partout, buckets privés, pooler Supavisor. |
 | En-têtes & CSP | CSP à nonce en `Report-Only` puis appliquée, HSTS et autres en-têtes. |
 | Journalisation | Logger structuré avec masquage central + test « aucune donnée sensible dans les logs » ; journal d'audit append-only. |
-| Sauvegardes | Sauvegarde chiffrée + premier test de restauration automatisé. |
+| Sauvegardes | PITR Supabase activé ; export `pg_dump` quotidien chiffré `age` vers un stockage externe ; premier test de restauration automatisé. |
+| Alertes | Envoi e-mail + WhatsApp (API WhatsApp Business Cloud, modèles approuvés), sans donnée client. |
 | Documentation | `docs/security/asvs-checklist.md`, `docs/security/incident-response.md`, politique de mises à jour. |
 
 **Porte 1** : CI de sécurité bloquante active, restauration testée avec succès.
@@ -42,9 +44,9 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 
 | Livrable | Détail |
 |---|---|
-| Comptes | Inscription, vérification d'e-mail, connexion, réinitialisation, Argon2id, contrôle des mots de passe compromis. |
+| Comptes | Supabase Auth côté serveur : inscription, vérification d'e-mail, connexion, réinitialisation, protection contre les mots de passe compromis. |
 | Sessions | Cookies `__Host-`, `HttpOnly`, `Secure`, `SameSite`, rotation, révocation, CSRF. |
-| MFA admin | TOTP + WebAuthn, codes de secours, réauthentification pour actions sensibles. |
+| MFA admin | TOTP Supabase avec exigence `aal2` (serveur + RLS), deux facteurs par admin, réauthentification pour actions sensibles. |
 | Autorisation | RBAC + contrôle de propriété, RLS en défense en profondeur. |
 | Limitation de débit | Connexion, MFA, réinitialisation, inscription, API sensibles. |
 | Tests | Matrice d'autorisation automatisée (rôle × route), tests IDOR, CSRF, sessions. |
@@ -66,8 +68,8 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 
 | Livrable | Détail |
 |---|---|
-| Stockage | Bucket privé, URL signées courtes délivrées après contrôle du droit. |
-| Uploads admin | Liste blanche + octets magiques, taille max, antivirus, re-encodage d'images, noms aléatoires. |
+| Stockage | Buckets Supabase Storage privés, URL signées courtes délivrées après contrôle du droit ; décision sur l'hébergement des vidéos longues. |
+| Uploads admin | Liste blanche + octets magiques, taille max, antivirus (service à choisir), re-encodage d'images, noms aléatoires. |
 | Droits | Table `entitlements` avec contraintes d'unicité ; lecture des contenus conditionnée au droit actif. |
 | Tests | Accès sans droit, URL expirée/forgée, uploads malveillants. |
 
@@ -78,9 +80,9 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 | Livrable | Détail |
 |---|---|
 | Client API | Client Chariow typé (Zod), timeouts, reprises, respect de `Retry-After`, budget de débit, clés séparées par usage. |
-| Checkout | `POST /api/checkout` → `POST /v1/checkout` (avec `custom_metadata.order_ref`, `redirect_url`, `customer_ip`) ; gestion `payment` / `completed` / `already_purchased` ; enregistrement immédiat de `chariow_sale_id`. Lien boutique Chariow pour les types non pris en charge par l'API. |
+| Checkout | Formulaire avec téléphone (indicatif pays + numéro). `POST /api/checkout` → `POST /v1/checkout` (avec `custom_metadata.order_ref`, `redirect_url`, `customer_ip`) ; gestion `payment` / `completed` / `already_purchased` ; enregistrement immédiat de `chariow_sale_id`. Lien boutique Chariow pour les types non pris en charge par l'API. |
 | Récepteur Pulses | HMAC sur corps brut, temps constant, persistance + mise en file transactionnelle, réponse < 1 s. |
-| File & workers | pg-boss, états (`received` → `granted`/`rejected`/`needs_review`/`retry`/`dead_letter`), backoff. |
+| File & workers | Supabase Queues (pgmq) ; worker Vercel déclenché chaque minute par `pg_cron` + `pg_net` et immédiatement via `after()` ; états (`received` → `granted`/`rejected`/`needs_review`/`retry`/`dead_letter`), backoff. |
 | Vérification | Contrôles complets via `GET /v1/sales/{id}` (§6.5) avant toute attribution. |
 | Attribution | Idempotente, un droit par produit, rattachement utilisateur ou e-mail vérifié. |
 | Page de retour | Statut « vérification en cours », vérification active après 60 s. |
@@ -96,7 +98,7 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 | Correspondances | Écran de mapping Chariow → Academy (packs inclus), journalisé, MFA. |
 | Rapprochement | Tâches 5 min / 15 min / quotidienne (§6.10), santé des Pulses. |
 | Remboursements | Détection `is_access_revoked`, révocation, action admin manuelle. |
-| Import historique | Simulation, exécution par lots idempotente, rapport, suppression de la clé d'import. |
+| Import historique | Simulation, exécution par lots idempotente, e-mails d'invitation aux clients importés, rapport, suppression de la clé d'import. |
 | Tests | Test de résilience : backend coupé pendant une vente → vente récupérée. |
 
 **Porte 6** : une interruption du backend ne provoque la perte d'aucune vente (démontré).
@@ -106,7 +108,7 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 | Livrable | Détail |
 |---|---|
 | Tableau de supervision | Pulses, file, sync_runs, écarts, quota API, actions de reprise (§6.14). |
-| Alertes | Toutes les alertes de la §8.2 de l'architecture, avec canal de notification à définir. |
+| Alertes | Toutes les alertes de la §8.2 de l'architecture : e-mail pour toutes, WhatsApp pour les critiques. |
 
 ### Phase 8 — Recette de sécurité et mise en production (≈ 1 semaine)
 
@@ -114,7 +116,7 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 |---|---|
 | Tests | DAST (OWASP ZAP) en préproduction, revue de la checklist ASVS, revue manuelle du code sensible (paiement, autorisation). |
 | Exploitation | Test de restauration complet, exercice de réponse à incident, runbooks. |
-| Bascule | Configuration du Pulse de production (Chariow : Automations → Pulses), rotation des clés de test, CSP appliquée, surveillance renforcée 72 h. |
+| Bascule | Configuration du Pulse de production (Chariow : Automations → Pulses), import historique et invitations, rotation des clés de test, CSP appliquée, surveillance renforcée 72 h. |
 
 **Porte 8 (production)** : tous les critères de validation (§3) vérifiés et tests de sécurité bloquants au vert.
 
@@ -131,14 +133,11 @@ Les durées sont des **estimations indicatives** pour une personne à temps plei
 | Les sauvegardes permettent une restauration contrôlée | 1, 8 |
 | Les tests de sécurité bloquants sont réussis avant production | 1 → 8 |
 
-## 4. Décisions attendues avant implémentation
+## 4. Décisions
 
-1. **Cahier des charges initial** : il n'est pas dans le dépôt. Faut-il le fournir pour aligner ce document sur les fonctionnalités de base (catalogue, pages, contenus Academy) ?
-2. **Pile technique** : valider TypeScript / Next.js / PostgreSQL / pg-boss (architecture §3), ou imposer une autre pile.
-3. **Hébergement** et CDN/WAF (ex. Cloudflare + hébergeur Node + PostgreSQL managé + stockage S3).
-4. **AroSoft Academy** : plateforme à construire dans ce projet, ou outil existant ? Les cours Chariow (type *course*) sont-ils utilisés, ou Academy héberge-t-elle seule les contenus ?
-5. **Mode d'achat** : checkout via l'API (`POST /v1/checkout`, recommandé : lien commande ↔ vente fiable, retour vers AroSoft) **ou** simple redirection vers la boutique `arosoft.mychariow.com` ? L'API impose de collecter le **téléphone** de l'acheteur.
-6. **Remboursements** : Chariow ne documente pas d'événement de remboursement. Accepter une détection par rapprochement (délai ≤ 24 h) + révocation manuelle immédiate par un admin ?
-7. **Achats historiques** : 92 clients existent sur Chariow. Importer tous les achats ? Envoyer un e-mail d'invitation aux clients importés ?
-8. **Objectifs de reprise** : RPO 15 min / RTO 4 h conviennent-ils ?
-9. **Canal d'alertes** : e-mail, WhatsApp, Slack, Telegram ?
+Les 9 questions de cadrage ont reçu une réponse (architecture §0). Points encore ouverts :
+
+1. **Budget** : Vercel Pro + Supabase Pro + option PITR + stockage externe des sauvegardes, nécessaires pour RPO 15 min / RTO 4 h et les fonctions de sécurité retenues.
+2. **Vidéos de cours** : volume et durée prévus, pour choisir entre Supabase Storage et un service de streaming sécurisé (phase 4).
+3. **Numéro d'astreinte WhatsApp** : numéro qui recevra les alertes critiques, et numéro WhatsApp Business API d'envoi (compte Meta Business à créer).
+4. **Réponses du support Chariow** sur les points non documentés (phase 0).
