@@ -63,8 +63,32 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
 #s2b-card:after{content:"";position:absolute;inset:0;border-radius:40px;box-shadow:inset 0 0 80px rgba(18,14,11,.35)}
 #s2b-cap{margin-top:56px;font-size:84px;color:var(--goldD);line-height:1}
 
+/* H : hook */
+#h-kick{font-family:'Montserrat';font-size:40px;letter-spacing:14px;font-weight:700;color:var(--ink2);margin-bottom:34px}
+#h-icon{width:300px;height:300px;margin-bottom:40px}
+#h-stop{font-family:'Montserrat';font-weight:800;font-size:150px;line-height:.95;letter-spacing:-2px;color:#2A1D14}
+#h-stop b{display:block;font-family:'Cormorant Garamond';font-weight:700;font-size:150px;letter-spacing:2px;color:#9E2F2F}
+#h-sub{margin-top:34px;font-size:64px;font-style:italic;color:var(--goldD)}
+#h-pill{margin-top:70px;padding:26px 52px;border-radius:999px;background:var(--night);color:#F3E2BF;
+  font-family:'Montserrat';font-size:36px;font-weight:700;letter-spacing:3px;display:flex;align-items:center;gap:18px;box-shadow:0 18px 40px rgba(60,35,15,.35)}
+/* D : différence épilation */
+#d-k{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:24px}
+#d-title{font-size:110px;font-weight:700;line-height:1;margin-bottom:60px}
+#d-title .ne{color:#9E2F2F;padding:0 18px}
+.dcard{width:880px;padding:44px 50px;border-radius:32px;margin:14px 0;text-align:left;display:flex;align-items:center;gap:36px}
+.dcard .t{font-family:'Montserrat';font-size:30px;letter-spacing:8px;font-weight:700}
+.dcard .v{font-size:76px;font-weight:700;line-height:1.05;margin-top:6px}
+#d1{background:rgba(255,250,244,.8);border:1.5px solid rgba(184,144,79,.5);box-shadow:0 14px 34px rgba(110,80,50,.12)}
+#d1 .t{color:var(--ink2)}
+#d2{background:radial-gradient(120% 120% at 20% 0%,#2A1F17,var(--night) 70%);box-shadow:0 26px 60px rgba(60,35,15,.4);border:2px solid rgba(231,201,136,.7)}
+#d2 .t{color:#F3E2BF}
+.dico{flex:0 0 110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+#d1 .dico{background:#EBD6C4}
+#d2 .dico{background:#2E231A;border:1.5px solid rgba(231,201,136,.6)}
+#d-bye{margin-top:56px;display:flex;align-items:center;gap:26px;font-size:100px;color:var(--goldD)}
+
 /* P : problèmes */
-#p-head{font-size:96px;font-weight:700;line-height:1.05;margin-bottom:24px}
+#p-head{font-size:88px;font-weight:700;line-height:1.05;margin-bottom:24px}
 #p-kick{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:30px}
 #p-sub{font-size:62px;font-style:italic;color:var(--goldD);margin-bottom:60px}
 .pain{width:880px;padding:32px 40px;margin:13px 0;border-radius:999px;font-size:60px;font-weight:700;
@@ -130,19 +154,25 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
 
   <!-- S1 : accroche + logo -->
   <div class="layer" id="s1">
-    <div id="s1-logo" class="a" style="position:relative"><img src="assets/logo-round.png" alt=""><div class="sheen"><i id="s1-sheen"></i></div></div>
-    <div id="s1-q" class="a"><small>MARY BELLE COSMETICS</small>Vous connaissez<br>le Vajacial&nbsp;?</div>
+    <div id="h-kick" class="a">MESDAMES…</div>
+    <svg viewBox="0 0 120 120" id="h-icon" class="a"><circle cx="60" cy="60" r="54" fill="#FFF8F1" stroke="#9E2F2F" stroke-width="7"/>
+<g transform="rotate(-35 60 60)"><rect x="30" y="30" width="60" height="16" rx="5" fill="#3B2A1F"/><rect x="32" y="26" width="56" height="3.5" rx="1.5" fill="#D9B877"/><rect x="32" y="46.5" width="56" height="3" rx="1.5" fill="#D9B877"/><path d="M57 50h6l2 44a5 5 0 0 1-10 0z" fill="#B8904F"/></g>
+<line x1="22" y1="98" x2="98" y2="22" stroke="#9E2F2F" stroke-width="8" stroke-linecap="round" id="h-slash" stroke-dasharray="108" stroke-dashoffset="108"/></svg>
+    <div id="h-stop" class="a">STOP<b>au rasoir&nbsp;!</b></div>
+    <div id="h-sub" class="a">sur votre maillot</div>
+    <div id="h-pill" class="a">RESTEZ JUSQU'À LA FIN <span style="font-size:44px">↓</span></div>
+  </div>
   </div>
 
   <!-- P : problèmes vécus -->
   <div class="layer" id="P">
-    <div id="p-kick" class="sans a">MESDAMES…</div>
-    <div id="p-head" class="a">Ça vous parle&nbsp;?</div>
-    <div id="p-sub" class="a">au niveau du maillot</div>
+    <div id="p-kick" class="sans a">LE RASOIR…</div>
+    <div id="p-head" class="a">coupe le poil à ras</div>
+    <div id="p-sub" class="a">… et il repousse sous la peau</div>
     <div class="pain a" id="p1">Poils incarnés</div>
-    <div class="pain a" id="p2">Boutons après le rasage</div>
+    <div class="pain a" id="p2">Boutons &amp; irritations</div>
     <div class="pain a" id="p3">Taches sombres</div>
-    <div class="pain a" id="p4">Peau rugueuse &amp; irritée</div>
+    <div class="pain a" id="p4">Peau rugueuse</div>
   </div>
 
   <!-- E : émotion -->
@@ -160,6 +190,17 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
     <div id="s2-sub" class="a">Un soin du visage…<br><em>pensé pour votre zone intime</em></div>
   </div>
 
+  <!-- D : Vajacial ≠ épilation -->
+  <div class="layer" id="D">
+    <div id="d-k" class="sans a">ATTENTION</div>
+    <div id="d-title" class="a">Vajacial<span class="ne">≠</span>épilation</div>
+    <div class="dcard a" id="d1"><div class="dico"><svg width="62" height="62" viewBox="0 0 24 24"><path fill="none" stroke="#6E5442" stroke-width="1.8" stroke-linecap="round" d="M6 20c2-6 3-10 3-16M12 20c0-6 0-10 0-16M18 20c-2-6-3-10-3-16"/></svg></div><div><div class="t">L'ÉPILATION</div><div class="v">enlève le poil</div></div></div>
+    <div class="dcard a" id="d2"><div class="dico">LEAF</div><div><div class="t">LE VAJACIAL</div><div class="v goldOnDark">soigne la peau</div></div></div>
+    <div id="d-bye" class="script a"><svg viewBox="0 0 120 120" width="110" height="110"><circle cx="60" cy="60" r="54" fill="#FFF8F1" stroke="#9E2F2F" stroke-width="7"/>
+<g transform="rotate(-35 60 60)"><rect x="30" y="30" width="60" height="16" rx="5" fill="#3B2A1F"/><rect x="32" y="26" width="56" height="3.5" rx="1.5" fill="#D9B877"/><rect x="32" y="46.5" width="56" height="3" rx="1.5" fill="#D9B877"/><path d="M57 50h6l2 44a5 5 0 0 1-10 0z" fill="#B8904F"/></g>
+<line x1="22" y1="98" x2="98" y2="22" stroke="#9E2F2F" stroke-width="8" stroke-linecap="round"/></svg>Adieu le rasoir</div>
+  </div>
+
   <!-- S2b : images du soin (clip recadré, sans légende ni filigrane) -->
   <div class="layer" id="s2b">
     <div id="s2b-kicker" class="sans a">LE SOIN EN CABINE</div>
@@ -175,16 +216,6 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
     <div class="ben a" id="b2"><div class="dot">LEAF</div><span>Moins de poils incarnés</span></div>
     <div class="ben a" id="b3"><div class="dot">LEAF</div><span>Teint plus uniforme</span></div>
     <div class="ben a" id="b4"><div class="dot">LEAF</div><span>Bien dans votre peau</span></div>
-  </div>
-
-  <!-- O : moment idéal -->
-  <div class="layer" id="O">
-    <div id="o-k" class="sans a">LE MOMENT IDÉAL</div>
-    <div class="occ a" id="o1">Avant vos vacances</div>
-    <div class="rule orule a" id="or1"></div>
-    <div class="occ a" id="o2">Avant un grand jour</div>
-    <div class="rule orule a" id="or2"></div>
-    <div class="occ script a" id="o3">ou simplement… pour vous</div>
   </div>
 
   <!-- S4 : prix -->
@@ -215,6 +246,7 @@ const LEAF='<svg class="leaf" viewBox="0 0 48 48"><defs><linearGradient id="lg" 
 const PIN='<svg width="40" height="40" viewBox="0 0 24 24"><path fill="#9C7438" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
 const PHONE='<svg width="32" height="32" viewBox="0 0 24 24"><path fill="#120E0B" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.3z"/></svg>';
 document.querySelectorAll('.dot').forEach(d=>d.innerHTML=LEAF);
+document.querySelector('#d2 .dico').innerHTML=LEAF.replace('class="leaf"','class="leaf" style="width:64px;height:64px"');
 const loc=document.getElementById('s5-loc'); loc.innerHTML=loc.innerHTML.replace('PIN',PIN);
 const lab=document.querySelector('#s5-tel .l'); lab.innerHTML=lab.innerHTML.replace('PHONE',PHONE);
 
@@ -226,8 +258,8 @@ for(let i=0;i<38;i++){const e=document.createElement('div');e.className='p a';co
   P.push({e,x:rnd()*1080,y:rnd()*1920,v:12+rnd()*30,ph:rnd()*6.28,a:.35+rnd()*.5});}
 
 // ---------- timeline (seconds) ----------
-const DUR=56.5;
-const SC={s1:[0,3.15],P:[3.0,10.950000000000001],E:[10.8,14.55],s2:[14.4,20.049999999999997],s2b:[19.9,26.049999999999997],s3:[25.9,32.65],O:[32.5,37.05],s4:[36.9,45.05],s5:[44.9,DUR+1]};
+const DUR=68.0;
+const SC={s1:[0,6.75],P:[6.6,16.05],E:[15.9,19.65],s2:[19.5,25.25],D:[25.1,36.65],s2b:[36.5,42.65],s3:[42.5,49.25],s4:[49.1,57.25],s5:[57.1,DUR+1]};
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const eo=x=>1-Math.pow(1-clamp(x),3);            // easeOutCubic
 const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
@@ -236,22 +268,18 @@ const $=id=>document.getElementById(id);
 
 // element in-animations: [id, start, dur, type]
 const IN=[
- ['s1-logo',0.1,1.2,'zoom'],['s1-q',0.8,.9,'up'],
- ['p-kick',3.2,.7,'up'],['p-head',3.4,.9,'up'],['p-sub',3.9,.8,'up'],
- ['p1',4.6,.7,'left'],['p2',5.7,.7,'left'],['p3',6.8,.7,'left'],['p4',7.9,.7,'left'],
- ['e1',11,1.0,'up'],['e2',11.8,1.3,'wipe'],['e3',12.8,.9,'up'],
- ['s2-kicker',14.6,.8,'up'],['s2-title',14.8,1.3,'wipe'],['s2-rule',15.5,.9,'width'],['s2-sub',16.1,1.0,'up'],
- ['s2b-kicker',20.1,.8,'up'],['s2b-card',20.2,1.1,'zoom'],['s2b-cap',21.9,1.2,'wipe'],
- ['s3-head',26.1,.8,'up'],['s3-title',26.2,1.2,'wipe'],
- ['b1',26.8,.8,'left'],['b2',27.9,.8,'left'],['b3',29,.8,'left'],['b4',30.1,.8,'left'],
- ['o-k',32.7,.7,'up'],['o1',33,.8,'up'],['or1',33.6,.7,'width'],['o2',33.8,.8,'up'],['or2',34.4,.7,'width'],['o3',34.7,1.2,'wipe'],
- ['s4-card',37.1,1.1,'zoom'],['s4-name',38,1.1,'wipe'],['s4-rule',38.7,.9,'width'],
- ['s4-from',40.3,.8,'up'],['s4-price',40.7,1.3,'wipe'],['s4-note',42.5,1.0,'up'],
- ['s5-logo',45.1,1.1,'zoom'],['s5-brand',45.7,.8,'up'],['s5-soin',46.3,1.0,'wipe'],['s5-price',47.1,.9,'pop'],
- ['s5-cta',48.2,1.2,'wipe'],['s5-loc',49.5,.8,'up'],['s5-tel',50.4,.9,'pop'],
+ ['h-kick',0.1,0.5,'up'],['h-icon',0.25,0.6,'pop'],['h-stop',0.5,0.6,'pop'],['h-sub',1.6,0.6,'up'],['h-pill',3.6,0.6,'pop'],
+ ['p-kick',6.9,0.7,'up'],['p-head',7.1,0.9,'up'],['p-sub',8.5,0.8,'up'],['p1',10.4,0.7,'left'],['p2',11.4,0.7,'left'],['p3',13.4,0.7,'left'],['p4',14.4,0.7,'left'],
+ ['e1',16.1,1.0,'up'],['e2',16.9,1.3,'wipe'],['e3',17.9,0.9,'up'],
+ ['s2-kicker',19.7,0.8,'up'],['s2-title',19.9,1.3,'wipe'],['s2-rule',20.6,0.9,'width'],['s2-sub',21.2,1.0,'up'],
+ ['d-k',25.3,0.7,'up'],['d-title',25.5,0.9,'pop'],['d1',28.1,0.8,'left'],['d2',29.9,0.8,'left'],['d-bye',32.3,1.2,'wipe'],
+ ['s2b-kicker',36.7,0.8,'up'],['s2b-card',36.8,1.1,'zoom'],['s2b-cap',38.5,1.2,'wipe'],
+ ['s3-head',42.7,0.8,'up'],['s3-title',42.8,1.2,'wipe'],['b1',43.4,0.8,'left'],['b2',44.5,0.8,'left'],['b3',45.6,0.8,'left'],['b4',46.7,0.8,'left'],
+ ['s4-card',49.3,1.1,'zoom'],['s4-name',50.2,1.1,'wipe'],['s4-rule',50.9,0.9,'width'],['s4-from',52.5,0.8,'up'],['s4-price',52.9,1.3,'wipe'],['s4-note',54.7,1.0,'up'],
+ ['s5-logo',57.3,1.1,'zoom'],['s5-brand',57.9,0.8,'up'],['s5-soin',58.5,1.0,'wipe'],['s5-price',59.3,0.9,'pop'],['s5-cta',60.4,1.2,'wipe'],['s5-loc',61.7,0.8,'up'],['s5-tel',62.6,0.9,'pop'],
 ];
 // gold shimmer sweeps: [id, start]
-const SHINE=[['e2',13.1],['s2-title',16.3],['s3-title',27.5],['s4-name',39.2],['s4-price',42],['s4-price',43.5],['s5-soin',47.3],['s5-price .v',47.9],['s5-price .v',53.9]];
+const SHINE=[['e2',18.2],['s2-title',21.4],['d2 .v',30.7],['s3-title',44.1],['s4-name',51.4],['s4-price',54.2],['s4-price',55.7],['s5-soin',59.5],['s5-price .v',60.1],['s5-price .v',66.1]];
 
 function render(t){
   // ambient
@@ -278,26 +306,27 @@ function render(t){
     el.style.transform=tr; el.style.opacity=op; el.style.clipPath=cp;
   }
   // logo miniature : apparaît après l'intro, se retire sur l'écran final (grand logo déjà présent)
-  { const T5=SC.s5[0]; const bi=eo((t-(SC.P[0]+.2))/.7), bo=1-eio((t-(T5-.2))/.5); const o=Math.min(bi,bo);
+  { const T5=SC.s5[0]; const bi=eo((t-.3)/.7), bo=1-eio((t-(T5-.2))/.5); const o=Math.min(bi,bo);
     const bug=$('bug'); bug.style.opacity=o; bug.style.transform=`scale(${.7+.3*bi})`; }
+  // hook : barre du rasoir qui se trace + pulsation de la pastille
+  $('h-slash').setAttribute('stroke-dashoffset',108*(1-eio((t-0.9)/.5)));
+  if(t>2.6&&t<SC.s1[1]){$('h-pill').style.transform=`scale(${1+Math.sin((t-2.6)*5)*.03})`;}
   // logo sheen
-  const sp=clamp((t-1.2)/1.4); $('s1-sheen').style.left=(-40+sp*150)+'%';
   // logo gentle float
-  $('s1-logo').style.transform+=` translateY(${Math.sin(t*1.3)*8}px)`;
   $('s5-logo').style.transform+=` translateY(${Math.sin(t*1.3)*6}px)`;
   // gold text shimmer
   document.querySelectorAll('.gold,.goldOnDark').forEach(e=>e.style.backgroundPosition='100% 0');
   for(const [sel,s] of SHINE){const e=document.querySelector('#'+sel);const x=clamp((t-s)/1.3);
     if(x>0&&x<1) e.style.backgroundPosition=`${100-eio(x)*100}% 0`;}
   // price glow pulse
-  const pr=$('s4-price'); const g=clamp((t-41.5)/1)*(.6+.4*Math.sin(t*2.4));
+  const pr=$('s4-price'); const g=clamp((t-53.7)/1)*(.6+.4*Math.sin(t*2.4));
   pr.style.filter=`drop-shadow(0 0 ${18*g}px rgba(255,220,150,${.55*g}))`;
   // CTA button breathing
-  if(t>51.4){$('s5-tel').style.transform=`scale(${1+Math.sin((t-51.4)*3)*.025})`;}
-  // clip footage: 240 frames @30fps, played from t=19.9 (held on first/last frame outside)
-  const fi=Math.min(240,Math.max(1,Math.floor((t-19.9)*30)+1));
+  if(t>63.7){$('s5-tel').style.transform=`scale(${1+Math.sin((t-63.7)*3)*.025})`;}
+  // clip footage: 240 frames @30fps, played from t=36.5 (held on first/last frame outside)
+  const fi=Math.min(240,Math.max(1,Math.floor((t-36.5)*30)+1));
   const img=$('s2b-img'); const src='assets/clip/f'+String(fi).padStart(3,'0')+'.jpg';
-  img.style.transform=`scale(${1.02+clamp((t-19.9)/6)*0.06})`;
+  img.style.transform=`scale(${1.02+clamp((t-36.5)/6)*0.06})`;
   if(!img.src.endsWith(src)){img.src=src; return img.decode().catch(()=>{});}
 }
 window.render=render; window.DUR=DUR;

@@ -1,26 +1,26 @@
 # Mary Belle Cosmetics — Pub « Soin Vajacial » (TikTok 9:16)
 
 Livrables (`output/`)
-- `MaryBelle_Vajacial_1080x1920.mp4` — vidéo finale, 56,5 s, 1080×1920, 30 i/s, H.264 + AAC
+- `MaryBelle_Vajacial_1080x1920.mp4` — vidéo finale, 68 s, 1080×1920, 30 i/s, H.264 + AAC
 - `MaryBelle_Vajacial_Couverture_TikTok.png` — miniature TikTok
 - `storyboard_preview.jpg` — planche de prévisualisation
 - `soundtrack.m4a` — bande-son (voix-off + musique mixées)
 
-Découpage (logique persuasive : problème → émotion → solution → preuve → résultats → déclencheur → prix → action)
+Découpage (hook → problème causé par le rasoir → émotion → solution → différence avec l'épilation → preuve → résultats → prix → action)
 | Temps | Scène | Texte à l'écran |
 |---|---|---|
-| 0–3,6 s | Accroche + logo | « Vous connaissez le Vajacial ? » |
-| 3,6–10 s | Problèmes vécus | MESDAMES… Ça vous parle ? (au niveau du maillot) : Poils incarnés · Boutons après le rasage · Taches sombres · Peau rugueuse & irritée |
-| 10–13,5 s | Émotion | « Vous méritez de vous sentir belle… partout. » — même là où personne ne regarde |
-| 13,5–18 s | Solution | LA SOLUTION · Vajacial · Un soin du visage… pensé pour votre zone intime |
-| 18–25 s | Preuve en images | LE SOIN EN CABINE (clip recadré) · « Pores désincrustés, peau libérée » |
-| 25–31,5 s | Résultats | LES RÉSULTATS · Confiance : Peau nette & lisse · Moins de poils incarnés · Teint plus uniforme · Bien dans votre peau |
-| 31,5–35,5 s | Moment idéal | Avant vos vacances · Avant un grand jour · ou simplement… pour vous |
-| 35,5–44 s | **Prix** | SOIN VAJACIAL · À PARTIR DE · 25 000 F CFA |
-| 44–56 s | Appel à l'action | Marque, soin, prix « À partir de », « Réservez votre moment beauté ! », Riviera Palmeraie — Abidjan, WhatsApp & Appels +225 07 88 84 52 44 |
+| 0–6,6 s | **Hook** | MESDAMES… (rasoir barré) STOP au rasoir ! · sur votre maillot · RESTEZ JUSQU'À LA FIN ↓ |
+| 6,6–15,9 s | Méfaits du rasoir | LE RASOIR… coupe le poil à ras · … et il repousse sous la peau : Poils incarnés · Boutons & irritations · Taches sombres · Peau rugueuse |
+| 15,9–19,5 s | Émotion | Vous méritez de vous sentir belle… partout. |
+| 19,5–25,1 s | Solution | LA SOLUTION · Vajacial · Un soin du visage… pensé pour votre zone intime |
+| 25,1–36,5 s | **Vajacial ≠ épilation** | L'ÉPILATION enlève le poil · LE VAJACIAL soigne la peau · Adieu le rasoir |
+| 36,5–42,5 s | Preuve en images | LE SOIN EN CABINE (clip recadré) · Pores désincrustés, peau libérée |
+| 42,5–49,1 s | Résultats | Peau nette & lisse · Moins de poils incarnés · Teint plus uniforme · Bien dans votre peau |
+| 49,1–57,1 s | Prix | SOIN VAJACIAL · À PARTIR DE · 25 000 F CFA |
+| 57,1–68 s | Appel à l'action | Réservez votre moment beauté ! · Riviera Palmeraie — Abidjan · WhatsApp & Appels +225 07 88 84 52 44 |
 
 Voix-off : voix féminine « Louise – Warm & Authentic French Voice » (ElevenLabs, modèle eleven_v4).
-Prise complète : `audio/voixoff_elevenlabs_louise.mp3` ; découpée en 9 phrases `audio/vo1.wav` … `vo9.wav`
+Prises : `audio/voixoff_elevenlabs_louise.mp3` + `audio/voixoff_elevenlabs_louise_v2_hook_rasoir.mp3` (hook, rasoir, épilation) ; découpée en 9 phrases `audio/vo01.wav` … `vo09.wav`
 (texte dans `audio/lines.txt`), chacune calée au début de sa scène (`offs` dans `make_audio.py`).
 Logo miniature permanent en haut à droite (masqué sur l'intro et l'écran final, où le grand logo est déjà présent).
 

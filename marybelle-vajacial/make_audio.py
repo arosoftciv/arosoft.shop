@@ -1,6 +1,6 @@
 # Generates soft music bed + chimes, mixes voice-off at scene timings -> output/soundtrack.m4a
 import numpy as np, wave, subprocess
-SR=44100; DUR=56.5; N=int(SR*DUR); t=np.arange(N)/SR
+SR=44100; DUR=68.0; N=int(SR*DUR); t=np.arange(N)/SR
 def hz(m): return 440*2**((m-69)/12)
 chords=[[53,57,60,64],[57,60,64,67],[50,57,60,65,64],[46,53,57,62]]  # Fmaj7 Am7 Dm9 Bbmaj7
 pad=np.zeros(N); L=4.5
@@ -16,7 +16,7 @@ def bell(at,notes,amp=.12):
         s=at+k*.09; idx=t>=s; tt=t[idx]-s; f=hz(m)
         out[idx]+=amp*np.exp(-tt*2.2)*(np.sin(2*np.pi*f*tt)+.4*np.sin(2*np.pi*2.76*f*tt)*np.exp(-tt*3))
     return out
-fx=bell(.15,[84,88,91])+bell(3.1,[84,88])+bell(10.9,[84,88])+bell(14.5,[84,88])+bell(20,[84,88])+bell(26,[84,88])+bell(32.6,[84,88])+bell(37,[84,88])+bell(45,[84,88])+bell(40.7,[84,88,91,96],.16)
+fx=bell(.15,[84,88,91])+bell(.9,[76,79],.14)+bell(6.7,[84,88])+bell(16,[84,88])+bell(19.6,[84,88])+bell(25.2,[84,88])+bell(36.6,[84,88])+bell(42.6,[84,88])+bell(49.2,[84,88])+bell(57.2,[84,88])+bell(52.9,[84,88,91,96],.16)
 mus=pad+fx
 fade=np.clip(t/1.5,0,1)*np.clip((DUR-t)/2.0,0,1); mus*=fade
 st=np.stack([mus,mus],1); st/=np.abs(st).max()/0.6
@@ -25,15 +25,15 @@ with wave.open('audio/music.wav','wb') as w:
 
 # Voix-off : ElevenLabs (voix « Louise »), découpée en audio/vo1..vo9.wav, placée au début de chaque scène.
 USE_VO=True
-offs=[0.6, 3.35, 11.15, 14.75, 20.25, 26.25, 32.85, 37.25, 45.25]
+offs=[0.3, 6.95, 16.25, 19.85, 25.45, 36.85, 42.85, 49.45, 57.45]
 if USE_VO:
     inp=['-i','audio/music.wav']; flt=[]
     for i,o in enumerate(offs,1):
-        inp+=['-i',f'audio/vo{i}.wav']; flt.append(f'[{i}]adelay={int(o*1000)}|{int(o*1000)}[v{i}]')
+        inp+=['-i',f'audio/vo{i:02d}.wav']; flt.append(f'[{i}]adelay={int(o*1000)}|{int(o*1000)}[v{i}]')
     flt.append(''.join(f'[v{i}]' for i in range(1,len(offs)+1))+'amix=inputs='+str(len(offs))+':normalize=0[vo]')
-    flt.append('[0]volume=0.32[m];[vo]apad,atrim=0:56.5,asplit[vo1][vo2];[m][vo2]sidechaincompress=threshold=0.05:ratio=4:attack=20:release=400[md]')
-    flt.append('[md][vo1]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.0,atrim=0:56.5[out]')
+    flt.append('[0]volume=0.32[m];[vo]apad,atrim=0:68,asplit[vo1][vo2];[m][vo2]sidechaincompress=threshold=0.05:ratio=4:attack=20:release=400[md]')
+    flt.append('[md][vo1]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.0,atrim=0:68[out]')
 else:
-    inp=['-i','audio/music.wav']; flt=['[0]loudnorm=I=-16:TP=-1.0,atrim=0:56.5[out]']
+    inp=['-i','audio/music.wav']; flt=['[0]loudnorm=I=-16:TP=-1.0,atrim=0:68[out]']
 subprocess.run(['ffmpeg','-nostdin','-v','error','-y',*inp,'-filter_complex',';'.join(flt),'-map','[out]','-ar','44100','-c:a','aac','-b:a','192k','output/soundtrack.m4a'],check=True)
 print('ok')
