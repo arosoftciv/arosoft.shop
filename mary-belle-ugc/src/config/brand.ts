@@ -54,7 +54,7 @@ export const MEDIA = {
    * Vidéo du personnage parlant, lip-syncée sur TOUTE la voix-off
    * (même timeline que voix-off.mp3). null = mode APERÇU (photo + filigrane).
    */
-  talkingHead: null as string | null,
+  talkingHead: "video/talking-head.mp4" as string | null,
   characterStill: "character/reference.png",
   broll: {
     reception: "images/reception.jpg",
