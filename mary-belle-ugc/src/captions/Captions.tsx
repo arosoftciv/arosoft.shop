@@ -44,6 +44,10 @@ export const Captions: React.FC<{ hiddenRanges?: [number, number][]; bottom?: nu
           textTransform: "uppercase",
           color: COLORS.ivory,
           textShadow: "0 4px 18px rgba(0,0,0,0.55), 0 0 2px rgba(0,0,0,0.8)",
+          background: "rgba(73,48,45,0.55)",
+          backdropFilter: "blur(6px)",
+          borderRadius: 28,
+          padding: "14px 22px 14px 38px",
           WebkitTextStroke: "1.5px rgba(73,48,45,0.65)",
           paintOrder: "stroke fill",
         }}
