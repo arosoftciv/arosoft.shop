@@ -56,7 +56,23 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
   box-shadow:0 50px 110px rgba(60,35,15,.42),0 0 0 3px rgba(231,201,136,.9),0 0 0 16px rgba(246,235,225,.9),0 0 0 18px rgba(184,144,79,.6)}
 #s2b-img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:50% 45%}
 #s2b-card:after{content:"";position:absolute;inset:0;border-radius:40px;box-shadow:inset 0 0 80px rgba(18,14,11,.35)}
-#s2b-cap{margin-top:56px;font-size:96px;color:var(--goldD);line-height:1}
+#s2b-cap{margin-top:56px;font-size:84px;color:var(--goldD);line-height:1}
+
+/* P : problèmes */
+#p-head{font-size:96px;font-weight:700;line-height:1.05;margin-bottom:24px}
+#p-kick{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:30px}
+#p-sub{font-size:62px;font-style:italic;color:var(--goldD);margin-bottom:60px}
+.pain{width:880px;padding:32px 40px;margin:13px 0;border-radius:999px;font-size:60px;font-weight:700;
+  background:rgba(255,250,244,.78);border:1.5px solid rgba(184,144,79,.5);box-shadow:0 14px 34px rgba(110,80,50,.12)}
+/* E : émotion */
+#e1{font-size:92px;font-weight:700;line-height:1.08;max-width:900px}
+#e2{font-size:220px;line-height:1.1;margin:10px 0 0;padding:0 40px}
+#e3{font-size:62px;font-style:italic;color:var(--ink2);margin-top:20px}
+/* O : moment idéal */
+#o-k{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:60px}
+.occ{font-size:96px;font-weight:700;line-height:1.1}
+.occ.script{font-size:90px;white-space:nowrap;color:var(--goldD);font-weight:400;padding:0 30px}
+.orule{width:300px;margin:40px 0}
 
 /* S3 */
 #s3-head{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:24px}
@@ -112,9 +128,27 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
     <div id="s1-q" class="a"><small>MARY BELLE COSMETICS</small>Vous connaissez<br>le Vajacial&nbsp;?</div>
   </div>
 
+  <!-- P : problèmes vécus -->
+  <div class="layer" id="P">
+    <div id="p-kick" class="sans a">MESDAMES…</div>
+    <div id="p-head" class="a">Ça vous parle&nbsp;?</div>
+    <div id="p-sub" class="a">au niveau du maillot</div>
+    <div class="pain a" id="p1">Poils incarnés</div>
+    <div class="pain a" id="p2">Boutons après le rasage</div>
+    <div class="pain a" id="p3">Taches sombres</div>
+    <div class="pain a" id="p4">Peau rugueuse &amp; irritée</div>
+  </div>
+
+  <!-- E : émotion -->
+  <div class="layer" id="E">
+    <div id="e1" class="a">Vous méritez de vous sentir belle…</div>
+    <div id="e2" class="script gold a">partout.</div>
+    <div id="e3" class="a">même là où personne ne regarde</div>
+  </div>
+
   <!-- S2 : définition -->
   <div class="layer" id="s2">
-    <div id="s2-kicker" class="sans a">LE SOIN PHARE</div>
+    <div id="s2-kicker" class="sans a">LA SOLUTION</div>
     <div id="s2-title" class="script gold a">Vajacial</div>
     <div class="rule a" id="s2-rule" style="margin:20px 0 40px"></div>
     <div id="s2-sub" class="a">Un soin du visage…<br><em>pensé pour votre zone intime</em></div>
@@ -124,17 +158,27 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
   <div class="layer" id="s2b">
     <div id="s2b-kicker" class="sans a">LE SOIN EN CABINE</div>
     <div id="s2b-card" class="a"><img id="s2b-img" src="assets/clip/f001.jpg" alt=""></div>
-    <div id="s2b-cap" class="script a">Une peau nette, en douceur</div>
+    <div id="s2b-cap" class="script a">Pores désincrustés, peau libérée</div>
   </div>
 
   <!-- S3 : bienfaits -->
   <div class="layer" id="s3">
-    <div id="s3-head" class="sans a">LES BIENFAITS</div>
-    <div id="s3-title" class="script gold a">Douceur</div>
-    <div class="ben a" id="b1"><div class="dot">LEAF</div><span>Exfolie en douceur</span></div>
-    <div class="ben a" id="b2"><div class="dot">LEAF</div><span>Purifie les pores</span></div>
-    <div class="ben a" id="b3"><div class="dot">LEAF</div><span>Apaise après l'épilation</span></div>
-    <div class="ben a" id="b4"><div class="dot">LEAF</div><span>Unifie le teint</span></div>
+    <div id="s3-head" class="sans a">LES RÉSULTATS</div>
+    <div id="s3-title" class="script gold a">Confiance</div>
+    <div class="ben a" id="b1"><div class="dot">LEAF</div><span>Peau nette &amp; lisse</span></div>
+    <div class="ben a" id="b2"><div class="dot">LEAF</div><span>Moins de poils incarnés</span></div>
+    <div class="ben a" id="b3"><div class="dot">LEAF</div><span>Teint plus uniforme</span></div>
+    <div class="ben a" id="b4"><div class="dot">LEAF</div><span>Bien dans votre peau</span></div>
+  </div>
+
+  <!-- O : moment idéal -->
+  <div class="layer" id="O">
+    <div id="o-k" class="sans a">LE MOMENT IDÉAL</div>
+    <div class="occ a" id="o1">Avant vos vacances</div>
+    <div class="rule orule a" id="or1"></div>
+    <div class="occ a" id="o2">Avant un grand jour</div>
+    <div class="rule orule a" id="or2"></div>
+    <div class="occ script a" id="o3">ou simplement… pour vous</div>
   </div>
 
   <!-- S4 : prix -->
@@ -176,8 +220,8 @@ for(let i=0;i<38;i++){const e=document.createElement('div');e.className='p a';co
   P.push({e,x:rnd()*1080,y:rnd()*1920,v:12+rnd()*30,ph:rnd()*6.28,a:.35+rnd()*.5});}
 
 // ---------- timeline (seconds) ----------
-const DUR=44;
-const SC={s1:[0,4.15],s2:[4.0,9.15],s2b:[9.0,17.15],s3:[17.0,24.35],s4:[24.2,33.15],s5:[33.0,DUR+1]};
+const DUR=56;
+const SC={s1:[0,3.75],P:[3.6,10.15],E:[10.0,13.65],s2:[13.5,18.15],s2b:[18.0,25.15],s3:[25.0,31.65],O:[31.5,35.65],s4:[35.5,44.15],s5:[44.0,DUR+1]};
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const eo=x=>1-Math.pow(1-clamp(x),3);            // easeOutCubic
 const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
@@ -186,18 +230,22 @@ const $=id=>document.getElementById(id);
 
 // element in-animations: [id, start, dur, type]
 const IN=[
- ['s1-logo',0.15,1.3,'zoom'],['s1-q',1.0,1.0,'up'],
- ['s2-kicker',4.3,.8,'up'],['s2-title',4.5,1.4,'wipe'],['s2-rule',5.3,.9,'width'],['s2-sub',5.9,1.0,'up'],
- ['s2b-kicker',9.2,.8,'up'],['s2b-card',9.3,1.1,'zoom'],['s2b-cap',11.2,1.2,'wipe'],
- ['s3-head',17.2,.8,'up'],['s3-title',17.3,1.2,'wipe'],
- ['b1',17.9,.8,'left'],['b2',19.3,.8,'left'],['b3',20.6,.8,'left'],['b4',22.2,.8,'left'],
- ['s4-card',24.4,1.1,'zoom'],['s4-name',26.6,1.1,'wipe'],['s4-rule',27.5,.9,'width'],
- ['s4-from',28.4,.8,'up'],['s4-price',28.9,1.3,'wipe'],['s4-note',30.6,1.0,'up'],
- ['s5-logo',33.2,1.1,'zoom'],['s5-brand',33.8,.8,'up'],['s5-soin',34.5,1.0,'wipe'],['s5-price',35.4,.9,'pop'],
- ['s5-cta',36.6,1.2,'wipe'],['s5-loc',38.2,.8,'up'],['s5-tel',39.3,.9,'pop'],
+ ['s1-logo',0.1,1.2,'zoom'],['s1-q',0.8,.9,'up'],
+ ['p-kick',3.8,.7,'up'],['p-head',4.0,.9,'up'],['p-sub',4.5,.8,'up'],
+ ['p1',5.2,.7,'left'],['p2',6.3,.7,'left'],['p3',7.4,.7,'left'],['p4',8.5,.7,'left'],
+ ['e1',10.2,1.0,'up'],['e2',11.0,1.3,'wipe'],['e3',12.0,.9,'up'],
+ ['s2-kicker',13.7,.8,'up'],['s2-title',13.9,1.3,'wipe'],['s2-rule',14.6,.9,'width'],['s2-sub',15.2,1.0,'up'],
+ ['s2b-kicker',18.2,.8,'up'],['s2b-card',18.3,1.1,'zoom'],['s2b-cap',20.0,1.2,'wipe'],
+ ['s3-head',25.2,.8,'up'],['s3-title',25.3,1.2,'wipe'],
+ ['b1',25.9,.8,'left'],['b2',27.0,.8,'left'],['b3',28.1,.8,'left'],['b4',29.2,.8,'left'],
+ ['o-k',31.7,.7,'up'],['o1',32.0,.8,'up'],['or1',32.6,.7,'width'],['o2',32.8,.8,'up'],['or2',33.4,.7,'width'],['o3',33.7,1.2,'wipe'],
+ ['s4-card',35.7,1.1,'zoom'],['s4-name',36.6,1.1,'wipe'],['s4-rule',37.3,.9,'width'],
+ ['s4-from',37.9,.8,'up'],['s4-price',38.3,1.3,'wipe'],['s4-note',40.0,1.0,'up'],
+ ['s5-logo',44.2,1.1,'zoom'],['s5-brand',44.8,.8,'up'],['s5-soin',45.4,1.0,'wipe'],['s5-price',46.2,.9,'pop'],
+ ['s5-cta',47.3,1.2,'wipe'],['s5-loc',48.6,.8,'up'],['s5-tel',49.5,.9,'pop'],
 ];
 // gold shimmer sweeps: [id, start]
-const SHINE=[['s2-title',6.2],['s3-title',18.6],['s4-name',27.8],['s4-price',30.3],['s4-price',32],['s5-soin',35.6],['s5-price .v',36.4],['s5-price .v',41.5]];
+const SHINE=[['e2',12.3],['s2-title',15.4],['s3-title',26.6],['s4-name',37.8],['s4-price',39.6],['s4-price',42.0],['s5-soin',46.4],['s5-price .v',47.0],['s5-price .v',53.0]];
 
 function render(t){
   // ambient
@@ -233,14 +281,14 @@ function render(t){
   for(const [sel,s] of SHINE){const e=document.querySelector('#'+sel);const x=clamp((t-s)/1.3);
     if(x>0&&x<1) e.style.backgroundPosition=`${100-eio(x)*100}% 0`;}
   // price glow pulse
-  const pr=$('s4-price'); const g=clamp((t-29.6)/1)*(.6+.4*Math.sin(t*2.4));
+  const pr=$('s4-price'); const g=clamp((t-39.0)/1)*(.6+.4*Math.sin(t*2.4));
   pr.style.filter=`drop-shadow(0 0 ${18*g}px rgba(255,220,150,${.55*g}))`;
   // CTA button breathing
-  if(t>40.4){$('s5-tel').style.transform=`scale(${1+Math.sin((t-40.4)*3)*.025})`;}
-  // clip footage: 240 frames @30fps, played from t=9.0 (held on first/last frame outside)
-  const fi=Math.min(240,Math.max(1,Math.floor((t-9.0)*30)+1));
+  if(t>50.5){$('s5-tel').style.transform=`scale(${1+Math.sin((t-50.5)*3)*.025})`;}
+  // clip footage: 240 frames @30fps, played from t=18.0 (held on first/last frame outside)
+  const fi=Math.min(240,Math.max(1,Math.floor((t-18.0)*30)+1));
   const img=$('s2b-img'); const src='assets/clip/f'+String(fi).padStart(3,'0')+'.jpg';
-  img.style.transform=`scale(${1.02+clamp((t-9)/8)*0.06})`;
+  img.style.transform=`scale(${1.02+clamp((t-18)/7)*0.06})`;
   if(!img.src.endsWith(src)){img.src=src; return img.decode().catch(()=>{});}
 }
 window.render=render; window.DUR=DUR;
