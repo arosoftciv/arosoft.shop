@@ -50,6 +50,14 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
 #s2-sub{font-size:68px;font-weight:600;line-height:1.15;max-width:860px}
 #s2-sub em{font-style:italic;color:var(--goldD)}
 
+/* S2b : images du soin */
+#s2b-kicker{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:40px}
+#s2b-card{position:relative;width:860px;height:960px;border-radius:40px;overflow:hidden;background:var(--night);
+  box-shadow:0 50px 110px rgba(60,35,15,.42),0 0 0 3px rgba(231,201,136,.9),0 0 0 16px rgba(246,235,225,.9),0 0 0 18px rgba(184,144,79,.6)}
+#s2b-img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:50% 45%}
+#s2b-card:after{content:"";position:absolute;inset:0;border-radius:40px;box-shadow:inset 0 0 80px rgba(18,14,11,.35)}
+#s2b-cap{margin-top:56px;font-size:96px;color:var(--goldD);line-height:1}
+
 /* S3 */
 #s3-head{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:24px}
 #s3-title{font-size:150px;line-height:1;margin-bottom:70px}
@@ -112,6 +120,13 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
     <div id="s2-sub" class="a">Un soin du visage…<br><em>pensé pour votre zone intime</em></div>
   </div>
 
+  <!-- S2b : images du soin (clip recadré, sans légende ni filigrane) -->
+  <div class="layer" id="s2b">
+    <div id="s2b-kicker" class="sans a">LE SOIN EN CABINE</div>
+    <div id="s2b-card" class="a"><img id="s2b-img" src="assets/clip/f001.jpg" alt=""></div>
+    <div id="s2b-cap" class="script a">Une peau nette, en douceur</div>
+  </div>
+
   <!-- S3 : bienfaits -->
   <div class="layer" id="s3">
     <div id="s3-head" class="sans a">LES BIENFAITS</div>
@@ -161,8 +176,8 @@ for(let i=0;i<38;i++){const e=document.createElement('div');e.className='p a';co
   P.push({e,x:rnd()*1080,y:rnd()*1920,v:12+rnd()*30,ph:rnd()*6.28,a:.35+rnd()*.5});}
 
 // ---------- timeline (seconds) ----------
-const DUR=36;
-const SC={s1:[0,4.15],s2:[4.0,9.15],s3:[9.0,16.35],s4:[16.2,25.15],s5:[25.0,DUR+1]};
+const DUR=44;
+const SC={s1:[0,4.15],s2:[4.0,9.15],s2b:[9.0,17.15],s3:[17.0,24.35],s4:[24.2,33.15],s5:[33.0,DUR+1]};
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const eo=x=>1-Math.pow(1-clamp(x),3);            // easeOutCubic
 const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
@@ -173,15 +188,16 @@ const $=id=>document.getElementById(id);
 const IN=[
  ['s1-logo',0.15,1.3,'zoom'],['s1-q',1.0,1.0,'up'],
  ['s2-kicker',4.3,.8,'up'],['s2-title',4.5,1.4,'wipe'],['s2-rule',5.3,.9,'width'],['s2-sub',5.9,1.0,'up'],
- ['s3-head',9.2,.8,'up'],['s3-title',9.3,1.2,'wipe'],
- ['b1',9.9,.8,'left'],['b2',11.3,.8,'left'],['b3',12.6,.8,'left'],['b4',14.2,.8,'left'],
- ['s4-card',16.4,1.1,'zoom'],['s4-name',18.6,1.1,'wipe'],['s4-rule',19.5,.9,'width'],
- ['s4-from',20.4,.8,'up'],['s4-price',20.9,1.3,'wipe'],['s4-note',22.6,1.0,'up'],
- ['s5-logo',25.2,1.1,'zoom'],['s5-brand',25.8,.8,'up'],['s5-soin',26.5,1.0,'wipe'],['s5-price',27.4,.9,'pop'],
- ['s5-cta',28.6,1.2,'wipe'],['s5-loc',30.2,.8,'up'],['s5-tel',31.3,.9,'pop'],
+ ['s2b-kicker',9.2,.8,'up'],['s2b-card',9.3,1.1,'zoom'],['s2b-cap',11.2,1.2,'wipe'],
+ ['s3-head',17.2,.8,'up'],['s3-title',17.3,1.2,'wipe'],
+ ['b1',17.9,.8,'left'],['b2',19.3,.8,'left'],['b3',20.6,.8,'left'],['b4',22.2,.8,'left'],
+ ['s4-card',24.4,1.1,'zoom'],['s4-name',26.6,1.1,'wipe'],['s4-rule',27.5,.9,'width'],
+ ['s4-from',28.4,.8,'up'],['s4-price',28.9,1.3,'wipe'],['s4-note',30.6,1.0,'up'],
+ ['s5-logo',33.2,1.1,'zoom'],['s5-brand',33.8,.8,'up'],['s5-soin',34.5,1.0,'wipe'],['s5-price',35.4,.9,'pop'],
+ ['s5-cta',36.6,1.2,'wipe'],['s5-loc',38.2,.8,'up'],['s5-tel',39.3,.9,'pop'],
 ];
 // gold shimmer sweeps: [id, start]
-const SHINE=[['s2-title',6.2],['s3-title',10.6],['s4-name',19.8],['s4-price',22.3],['s4-price',24.0],['s5-soin',27.6],['s5-price .v',28.4],['s5-price .v',33.5]];
+const SHINE=[['s2-title',6.2],['s3-title',18.6],['s4-name',27.8],['s4-price',30.3],['s4-price',32],['s5-soin',35.6],['s5-price .v',36.4],['s5-price .v',41.5]];
 
 function render(t){
   // ambient
@@ -217,10 +233,15 @@ function render(t){
   for(const [sel,s] of SHINE){const e=document.querySelector('#'+sel);const x=clamp((t-s)/1.3);
     if(x>0&&x<1) e.style.backgroundPosition=`${100-eio(x)*100}% 0`;}
   // price glow pulse
-  const pr=$('s4-price'); const g=clamp((t-21.6)/1)*(.6+.4*Math.sin(t*2.4));
+  const pr=$('s4-price'); const g=clamp((t-29.6)/1)*(.6+.4*Math.sin(t*2.4));
   pr.style.filter=`drop-shadow(0 0 ${18*g}px rgba(255,220,150,${.55*g}))`;
   // CTA button breathing
-  if(t>32.4){$('s5-tel').style.transform=`scale(${1+Math.sin((t-32.4)*3)*.025})`;}
+  if(t>40.4){$('s5-tel').style.transform=`scale(${1+Math.sin((t-40.4)*3)*.025})`;}
+  // clip footage: 240 frames @30fps, played from t=9.0 (held on first/last frame outside)
+  const fi=Math.min(240,Math.max(1,Math.floor((t-9.0)*30)+1));
+  const img=$('s2b-img'); const src='assets/clip/f'+String(fi).padStart(3,'0')+'.jpg';
+  img.style.transform=`scale(${1.02+clamp((t-9)/8)*0.06})`;
+  if(!img.src.endsWith(src)){img.src=src; return img.decode().catch(()=>{});}
 }
 window.render=render; window.DUR=DUR;
 
