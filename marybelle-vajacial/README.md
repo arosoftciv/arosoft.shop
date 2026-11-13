@@ -4,10 +4,10 @@ Livrables (`output/`)
 - `MaryBelle_Vajacial_1080x1920.mp4` — vidéo finale, 36 s, 1080×1920, 30 i/s, H.264 + AAC
 - `MaryBelle_Vajacial_Couverture_TikTok.png` — miniature TikTok
 - `storyboard_preview.jpg` — planche de prévisualisation
-- `soundtrack.m4a` — voix-off + musique mixées
+- `soundtrack.m4a` — bande-son (musique d'ambiance seule, sans voix-off)
 
 Découpage
-| Temps | Scène | Voix-off |
+| Temps | Scène | Voix-off prévue (non intégrée) |
 |---|---|---|
 | 0–4 s | Logo + accroche | « Vous connaissez le Vajacial ? » |
 | 4–9 s | Définition | « C'est un soin du visage… pensé pour votre zone intime. » |
@@ -17,12 +17,12 @@ Découpage
 
 Régénérer
 ```
-python3 make_audio.py   # bande-son (audio/vo*.wav + musique générée)
+python3 make_audio.py   # bande-son (musique générée)
 node render.js          # vidéo (capture image par image de ad.html)
 node cover.js           # miniature
 ```
 Prévisualisation live : ouvrir `ad.html?play` dans un navigateur (clic = son).
 
-Voix-off actuelle : synthèse locale (espeak-ng + MBROLA fr4) faute de service TTS disponible.
-Pour la diffusion, remplacer `audio/vo1.wav` … `vo5.wav` par un enregistrement humain (mêmes textes, voir `audio/lines.txt`)
-puis relancer les deux premières commandes ; ajuster les décalages `offs` dans `make_audio.py` si les durées changent.
+Voix-off : **désactivée pour l'instant** (`USE_VO=False` dans `make_audio.py`). La vidéo est rythmée par la musique seule.
+Le texte prévu reste dans `audio/lines.txt`. Pour l'ajouter plus tard : déposer `audio/vo1.wav` … `vo5.wav`
+(enregistrement humain), passer `USE_VO=True`, relancer `python3 make_audio.py` puis `node render.js`.
