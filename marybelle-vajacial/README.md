@@ -1,10 +1,10 @@
 # Mary Belle Cosmetics — Pub « Soin Vajacial » (TikTok 9:16)
 
 Livrables (`output/`)
-- `MaryBelle_Vajacial_1080x1920.mp4` — vidéo finale, 56 s, 1080×1920, 30 i/s, H.264 + AAC
+- `MaryBelle_Vajacial_1080x1920.mp4` — vidéo finale, 56,5 s, 1080×1920, 30 i/s, H.264 + AAC
 - `MaryBelle_Vajacial_Couverture_TikTok.png` — miniature TikTok
 - `storyboard_preview.jpg` — planche de prévisualisation
-- `soundtrack.m4a` — bande-son (musique d'ambiance seule, sans voix-off)
+- `soundtrack.m4a` — bande-son (voix-off + musique mixées)
 
 Découpage (logique persuasive : problème → émotion → solution → preuve → résultats → déclencheur → prix → action)
 | Temps | Scène | Texte à l'écran |
@@ -19,7 +19,10 @@ Découpage (logique persuasive : problème → émotion → solution → preuve 
 | 35,5–44 s | **Prix** | SOIN VAJACIAL · À PARTIR DE · 25 000 F CFA |
 | 44–56 s | Appel à l'action | Marque, soin, prix « À partir de », « Réservez votre moment beauté ! », Riviera Palmeraie — Abidjan, WhatsApp & Appels +225 07 88 84 52 44 |
 
-Voix-off prévue (non intégrée) : voir `audio/lines.txt`.
+Voix-off : voix féminine « Louise – Warm & Authentic French Voice » (ElevenLabs, modèle eleven_v4).
+Prise complète : `audio/voixoff_elevenlabs_louise.mp3` ; découpée en 9 phrases `audio/vo1.wav` … `vo9.wav`
+(texte dans `audio/lines.txt`), chacune calée au début de sa scène (`offs` dans `make_audio.py`).
+Logo miniature permanent en haut à droite (masqué sur l'intro et l'écran final, où le grand logo est déjà présent).
 
 Images du soin : `assets/clip/` = extrait 1,5 s → 9,5 s du clip fourni, recadré (x 110–576, y 165–685 sur 576×854)
 pour exclure la légende et les deux positions du filigrane, sans flou ni retouche.

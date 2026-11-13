@@ -34,6 +34,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
 #frame{position:absolute;inset:38px;border:2px solid rgba(184,144,79,.55);border-radius:28px;pointer-events:none}
 #frame:after{content:"";position:absolute;inset:12px;border:1px solid rgba(184,144,79,.35);border-radius:20px}
 
+/* logo miniature permanent (haut droite) */
+#bug{position:absolute;top:78px;right:78px;width:150px;height:150px;border-radius:50%;z-index:20;
+  box-shadow:0 10px 26px rgba(60,35,15,.35),0 0 0 4px rgba(241,219,166,.55)}
+#bug img{width:100%;height:100%;border-radius:50%;display:block}
+
 /* S1 */
 #s1-logo{width:720px;height:720px;border-radius:50%;
   box-shadow:0 40px 90px rgba(80,50,25,.35),0 0 0 10px rgba(241,219,166,.35)}
@@ -121,6 +126,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
   <div id="glow" class="a"></div>
   <div id="particles"></div>
   <div id="frame"></div>
+  <div id="bug" class="a"><img src="assets/logo-round.png" alt=""></div>
 
   <!-- S1 : accroche + logo -->
   <div class="layer" id="s1">
@@ -220,8 +226,8 @@ for(let i=0;i<38;i++){const e=document.createElement('div');e.className='p a';co
   P.push({e,x:rnd()*1080,y:rnd()*1920,v:12+rnd()*30,ph:rnd()*6.28,a:.35+rnd()*.5});}
 
 // ---------- timeline (seconds) ----------
-const DUR=56;
-const SC={s1:[0,3.75],P:[3.6,10.15],E:[10.0,13.65],s2:[13.5,18.15],s2b:[18.0,25.15],s3:[25.0,31.65],O:[31.5,35.65],s4:[35.5,44.15],s5:[44.0,DUR+1]};
+const DUR=56.5;
+const SC={s1:[0,3.15],P:[3.0,10.950000000000001],E:[10.8,14.55],s2:[14.4,20.049999999999997],s2b:[19.9,26.049999999999997],s3:[25.9,32.65],O:[32.5,37.05],s4:[36.9,45.05],s5:[44.9,DUR+1]};
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const eo=x=>1-Math.pow(1-clamp(x),3);            // easeOutCubic
 const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
@@ -231,21 +237,21 @@ const $=id=>document.getElementById(id);
 // element in-animations: [id, start, dur, type]
 const IN=[
  ['s1-logo',0.1,1.2,'zoom'],['s1-q',0.8,.9,'up'],
- ['p-kick',3.8,.7,'up'],['p-head',4.0,.9,'up'],['p-sub',4.5,.8,'up'],
- ['p1',5.2,.7,'left'],['p2',6.3,.7,'left'],['p3',7.4,.7,'left'],['p4',8.5,.7,'left'],
- ['e1',10.2,1.0,'up'],['e2',11.0,1.3,'wipe'],['e3',12.0,.9,'up'],
- ['s2-kicker',13.7,.8,'up'],['s2-title',13.9,1.3,'wipe'],['s2-rule',14.6,.9,'width'],['s2-sub',15.2,1.0,'up'],
- ['s2b-kicker',18.2,.8,'up'],['s2b-card',18.3,1.1,'zoom'],['s2b-cap',20.0,1.2,'wipe'],
- ['s3-head',25.2,.8,'up'],['s3-title',25.3,1.2,'wipe'],
- ['b1',25.9,.8,'left'],['b2',27.0,.8,'left'],['b3',28.1,.8,'left'],['b4',29.2,.8,'left'],
- ['o-k',31.7,.7,'up'],['o1',32.0,.8,'up'],['or1',32.6,.7,'width'],['o2',32.8,.8,'up'],['or2',33.4,.7,'width'],['o3',33.7,1.2,'wipe'],
- ['s4-card',35.7,1.1,'zoom'],['s4-name',36.6,1.1,'wipe'],['s4-rule',37.3,.9,'width'],
- ['s4-from',37.9,.8,'up'],['s4-price',38.3,1.3,'wipe'],['s4-note',40.0,1.0,'up'],
- ['s5-logo',44.2,1.1,'zoom'],['s5-brand',44.8,.8,'up'],['s5-soin',45.4,1.0,'wipe'],['s5-price',46.2,.9,'pop'],
- ['s5-cta',47.3,1.2,'wipe'],['s5-loc',48.6,.8,'up'],['s5-tel',49.5,.9,'pop'],
+ ['p-kick',3.2,.7,'up'],['p-head',3.4,.9,'up'],['p-sub',3.9,.8,'up'],
+ ['p1',4.6,.7,'left'],['p2',5.7,.7,'left'],['p3',6.8,.7,'left'],['p4',7.9,.7,'left'],
+ ['e1',11,1.0,'up'],['e2',11.8,1.3,'wipe'],['e3',12.8,.9,'up'],
+ ['s2-kicker',14.6,.8,'up'],['s2-title',14.8,1.3,'wipe'],['s2-rule',15.5,.9,'width'],['s2-sub',16.1,1.0,'up'],
+ ['s2b-kicker',20.1,.8,'up'],['s2b-card',20.2,1.1,'zoom'],['s2b-cap',21.9,1.2,'wipe'],
+ ['s3-head',26.1,.8,'up'],['s3-title',26.2,1.2,'wipe'],
+ ['b1',26.8,.8,'left'],['b2',27.9,.8,'left'],['b3',29,.8,'left'],['b4',30.1,.8,'left'],
+ ['o-k',32.7,.7,'up'],['o1',33,.8,'up'],['or1',33.6,.7,'width'],['o2',33.8,.8,'up'],['or2',34.4,.7,'width'],['o3',34.7,1.2,'wipe'],
+ ['s4-card',37.1,1.1,'zoom'],['s4-name',38,1.1,'wipe'],['s4-rule',38.7,.9,'width'],
+ ['s4-from',40.3,.8,'up'],['s4-price',40.7,1.3,'wipe'],['s4-note',42.5,1.0,'up'],
+ ['s5-logo',45.1,1.1,'zoom'],['s5-brand',45.7,.8,'up'],['s5-soin',46.3,1.0,'wipe'],['s5-price',47.1,.9,'pop'],
+ ['s5-cta',48.2,1.2,'wipe'],['s5-loc',49.5,.8,'up'],['s5-tel',50.4,.9,'pop'],
 ];
 // gold shimmer sweeps: [id, start]
-const SHINE=[['e2',12.3],['s2-title',15.4],['s3-title',26.6],['s4-name',37.8],['s4-price',39.6],['s4-price',42.0],['s5-soin',46.4],['s5-price .v',47.0],['s5-price .v',53.0]];
+const SHINE=[['e2',13.1],['s2-title',16.3],['s3-title',27.5],['s4-name',39.2],['s4-price',42],['s4-price',43.5],['s5-soin',47.3],['s5-price .v',47.9],['s5-price .v',53.9]];
 
 function render(t){
   // ambient
@@ -271,6 +277,9 @@ function render(t){
     else if(type==='width'){tr=`scaleX(${k})`;op=clamp(x*2);}
     el.style.transform=tr; el.style.opacity=op; el.style.clipPath=cp;
   }
+  // logo miniature : apparaît après l'intro, se retire sur l'écran final (grand logo déjà présent)
+  { const T5=SC.s5[0]; const bi=eo((t-(SC.P[0]+.2))/.7), bo=1-eio((t-(T5-.2))/.5); const o=Math.min(bi,bo);
+    const bug=$('bug'); bug.style.opacity=o; bug.style.transform=`scale(${.7+.3*bi})`; }
   // logo sheen
   const sp=clamp((t-1.2)/1.4); $('s1-sheen').style.left=(-40+sp*150)+'%';
   // logo gentle float
@@ -281,14 +290,14 @@ function render(t){
   for(const [sel,s] of SHINE){const e=document.querySelector('#'+sel);const x=clamp((t-s)/1.3);
     if(x>0&&x<1) e.style.backgroundPosition=`${100-eio(x)*100}% 0`;}
   // price glow pulse
-  const pr=$('s4-price'); const g=clamp((t-39.0)/1)*(.6+.4*Math.sin(t*2.4));
+  const pr=$('s4-price'); const g=clamp((t-41.5)/1)*(.6+.4*Math.sin(t*2.4));
   pr.style.filter=`drop-shadow(0 0 ${18*g}px rgba(255,220,150,${.55*g}))`;
   // CTA button breathing
-  if(t>50.5){$('s5-tel').style.transform=`scale(${1+Math.sin((t-50.5)*3)*.025})`;}
-  // clip footage: 240 frames @30fps, played from t=18.0 (held on first/last frame outside)
-  const fi=Math.min(240,Math.max(1,Math.floor((t-18.0)*30)+1));
+  if(t>51.4){$('s5-tel').style.transform=`scale(${1+Math.sin((t-51.4)*3)*.025})`;}
+  // clip footage: 240 frames @30fps, played from t=19.9 (held on first/last frame outside)
+  const fi=Math.min(240,Math.max(1,Math.floor((t-19.9)*30)+1));
   const img=$('s2b-img'); const src='assets/clip/f'+String(fi).padStart(3,'0')+'.jpg';
-  img.style.transform=`scale(${1.02+clamp((t-18)/7)*0.06})`;
+  img.style.transform=`scale(${1.02+clamp((t-19.9)/6)*0.06})`;
   if(!img.src.endsWith(src)){img.src=src; return img.decode().catch(()=>{});}
 }
 window.render=render; window.DUR=DUR;
