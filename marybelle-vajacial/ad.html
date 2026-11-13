@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Mary Belle — Vajacial</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&family=Pinyon+Script&display=block" rel="stylesheet">
+<style>
+:root{
+  --nude1:#F6EBE1; --nude2:#EBD6C4; --nude3:#DCBFA8;
+  --ink:#3B2A1F; --ink2:#6E5442;
+  --gold:#B8904F; --goldD:#8A6630; --goldL:#F1DBA6;
+  --night:#120E0B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--nude1)}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+  background:radial-gradient(120% 70% at 50% 30%,var(--nude1) 0%,var(--nude2) 55%,var(--nude3) 100%);
+  font-family:'Cormorant Garamond',serif;color:var(--ink);font-variant-numeric:lining-nums}
+.layer{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.a{will-change:transform,opacity,filter}
+.gold{background:linear-gradient(100deg,var(--goldD) 0%,var(--gold) 22%,var(--goldL) 45%,var(--gold) 62%,var(--goldD) 85%,var(--gold) 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.goldOnDark{background:linear-gradient(100deg,#B98F4C 0%,#E7C988 25%,#FFF1CC 45%,#E3BF7A 60%,#B48A46 85%,#E7C988 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.sans{font-family:'Montserrat',sans-serif}
+.script{font-family:'Pinyon Script',cursive;font-weight:400}
+.rule{height:2px;width:420px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.leaf{width:46px;height:46px}
+
+/* ambient */
+#glow{position:absolute;width:1400px;height:1400px;left:-160px;top:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,240,215,.75) 0%,rgba(255,240,215,0) 60%)}
+.p{position:absolute;border-radius:50%;background:radial-gradient(circle,#FFF4D6 0%,#E2C07E 45%,rgba(226,192,126,0) 72%)}
+#frame{position:absolute;inset:38px;border:2px solid rgba(184,144,79,.55);border-radius:28px;pointer-events:none}
+#frame:after{content:"";position:absolute;inset:12px;border:1px solid rgba(184,144,79,.35);border-radius:20px}
+
+/* S1 */
+#s1-logo{width:720px;height:720px;border-radius:50%;
+  box-shadow:0 40px 90px rgba(80,50,25,.35),0 0 0 10px rgba(241,219,166,.35)}
+#s1-logo img{width:100%;height:100%;display:block;border-radius:50%}
+.sheen{position:absolute;inset:0;border-radius:50%;overflow:hidden}
+.sheen i{position:absolute;top:-20%;width:30%;height:140%;transform:rotate(20deg);
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,248,225,.55),rgba(255,255,255,0))}
+#s1-q{margin-top:90px;font-size:78px;font-weight:700;line-height:1.08;letter-spacing:1px}
+#s1-q small{display:block;font-family:'Montserrat';font-size:30px;letter-spacing:10px;font-weight:600;color:var(--ink2);margin-bottom:18px}
+
+/* S2 */
+#s2-kicker{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2)}
+#s2-title{font-size:230px;line-height:1;margin:30px 0 10px;padding:0 30px}
+#s2-sub{font-size:68px;font-weight:600;line-height:1.15;max-width:860px}
+#s2-sub em{font-style:italic;color:var(--goldD)}
+
+/* S3 */
+#s3-head{font-size:30px;letter-spacing:12px;font-weight:600;color:var(--ink2);margin-bottom:24px}
+#s3-title{font-size:150px;line-height:1;margin-bottom:70px}
+.ben{display:flex;align-items:center;gap:34px;width:860px;padding:34px 44px;margin:14px 0;
+  background:rgba(255,250,244,.72);border:1.5px solid rgba(184,144,79,.45);border-radius:999px;
+  box-shadow:0 14px 34px rgba(110,80,50,.12)}
+.ben .dot{flex:0 0 78px;height:78px;border-radius:50%;background:var(--night);display:flex;align-items:center;justify-content:center}
+.ben span{font-size:58px;font-weight:700;text-align:left}
+
+/* S4 price */
+#s4-card{position:relative;width:900px;padding:96px 50px 100px;border-radius:36px;background:
+  radial-gradient(120% 80% at 50% 0%,#2A1F17 0%,var(--night) 70%);
+  box-shadow:0 50px 110px rgba(60,35,15,.45)}
+#s4-card:before{content:"";position:absolute;inset:18px;border:2px solid rgba(231,201,136,.7);border-radius:24px}
+#s4-card:after{content:"";position:absolute;inset:30px;border:1px solid rgba(231,201,136,.35);border-radius:16px}
+#s4-name{font-size:84px;font-weight:700;letter-spacing:6px;white-space:nowrap;line-height:1}
+#s4-rule{margin:46px auto 40px;width:520px;background:linear-gradient(90deg,transparent,#E7C988,transparent)}
+#s4-from{font-family:'Montserrat';font-size:40px;letter-spacing:12px;font-weight:600;color:#F3E2BF}
+#s4-price{position:relative;margin-top:26px;font-size:170px;font-weight:700;line-height:1;white-space:nowrap}
+#s4-price .cur{font-size:110px}
+#s4-note{margin-top:60px;font-size:46px;color:#E9D6B3}
+
+/* S5 CTA */
+#s5-logo{width:330px;height:330px;border-radius:50%;box-shadow:0 26px 60px rgba(80,50,25,.32),0 0 0 7px rgba(241,219,166,.4)}
+#s5-logo img{width:100%;height:100%;border-radius:50%;display:block}
+#s5-brand{margin-top:40px;font-size:40px;letter-spacing:12px;font-weight:700}
+#s5-soin{margin-top:46px;font-size:92px;font-weight:700;letter-spacing:8px;line-height:1}
+#s5-price{margin-top:26px;display:inline-flex;align-items:baseline;gap:22px;padding:24px 50px;border-radius:999px;background:var(--night);
+  box-shadow:0 18px 40px rgba(60,35,15,.35)}
+#s5-price .f{font-family:'Montserrat';font-size:30px;letter-spacing:6px;font-weight:600;color:#F3E2BF}
+#s5-price .v{font-size:82px;font-weight:700;line-height:1}
+#s5-cta{margin-top:46px;font-size:104px;line-height:1.05;color:var(--goldD)}
+#s5-loc{margin-top:40px;font-family:'Montserrat';font-size:36px;font-weight:600;letter-spacing:2px;display:flex;align-items:center;gap:16px}
+#s5-tel{margin-top:34px;padding:26px 54px;border-radius:26px;background:linear-gradient(135deg,#C9A262,#E9D09A 45%,#B68C4C);
+  box-shadow:0 18px 40px rgba(120,85,40,.35);color:var(--night)}
+#s5-tel .l{font-family:'Montserrat';font-size:28px;font-weight:700;letter-spacing:5px;display:flex;align-items:center;justify-content:center;gap:12px}
+#s5-tel .n{font-family:'Montserrat';font-size:62px;font-weight:700;letter-spacing:1px;margin-top:6px}
+
+/* preview controls (hidden during capture) */
+#ui{position:fixed;left:0;right:0;bottom:0;display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow" class="a"></div>
+  <div id="particles"></div>
+  <div id="frame"></div>
+
+  <!-- S1 : accroche + logo -->
+  <div class="layer" id="s1">
+    <div id="s1-logo" class="a" style="position:relative"><img src="assets/logo-round.png" alt=""><div class="sheen"><i id="s1-sheen"></i></div></div>
+    <div id="s1-q" class="a"><small>MARY BELLE COSMETICS</small>Vous connaissez<br>le Vajacial&nbsp;?</div>
+  </div>
+
+  <!-- S2 : définition -->
+  <div class="layer" id="s2">
+    <div id="s2-kicker" class="sans a">LE SOIN PHARE</div>
+    <div id="s2-title" class="script gold a">Vajacial</div>
+    <div class="rule a" id="s2-rule" style="margin:20px 0 40px"></div>
+    <div id="s2-sub" class="a">Un soin du visage…<br><em>pensé pour votre zone intime</em></div>
+  </div>
+
+  <!-- S3 : bienfaits -->
+  <div class="layer" id="s3">
+    <div id="s3-head" class="sans a">LES BIENFAITS</div>
+    <div id="s3-title" class="script gold a">Douceur</div>
+    <div class="ben a" id="b1"><div class="dot">LEAF</div><span>Exfolie en douceur</span></div>
+    <div class="ben a" id="b2"><div class="dot">LEAF</div><span>Purifie les pores</span></div>
+    <div class="ben a" id="b3"><div class="dot">LEAF</div><span>Apaise après l'épilation</span></div>
+    <div class="ben a" id="b4"><div class="dot">LEAF</div><span>Unifie le teint</span></div>
+  </div>
+
+  <!-- S4 : prix -->
+  <div class="layer" id="s4">
+    <div id="s4-card" class="a">
+      <div id="s4-name" class="goldOnDark a">SOIN VAJACIAL</div>
+      <div class="rule a" id="s4-rule"></div>
+      <div id="s4-from" class="a">À PARTIR DE</div>
+      <div id="s4-price" class="goldOnDark a">25&nbsp;000 <span class="cur">F CFA</span></div>
+      <div id="s4-note" class="script a" style="font-size:72px">un moment de douceur</div>
+    </div>
+  </div>
+
+  <!-- S5 : appel à l'action -->
+  <div class="layer" id="s5">
+    <div id="s5-logo" class="a"><img src="assets/logo-round.png" alt=""></div>
+    <div id="s5-brand" class="sans a">MARY BELLE COSMETICS</div>
+    <div id="s5-soin" class="gold a">SOIN VAJACIAL</div>
+    <div id="s5-price" class="a"><span class="f">À PARTIR DE</span><span class="v goldOnDark">25&nbsp;000 F CFA</span></div>
+    <div id="s5-cta" class="script a">Réservez votre moment beauté&nbsp;!</div>
+    <div id="s5-loc" class="a">PIN Riviera Palmeraie — Abidjan</div>
+    <div id="s5-tel" class="a"><div class="l">PHONE WHATSAPP &amp; APPELS</div><div class="n">+225 07 88 84 52 44</div></div>
+  </div>
+</div>
+
+<script>
+const LEAF='<svg class="leaf" viewBox="0 0 48 48"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1CC"/><stop offset=".5" stop-color="#E3BF7A"/><stop offset="1" stop-color="#A57B3C"/></linearGradient></defs><path fill="url(#lg)" d="M24 42c-1-8 0-17 9-26 3-3 7-5 9-6-1 4-2 9-5 14-4 7-9 11-13 18zm0 0c-3-6-9-9-14-11 1-5 4-9 8-10 4 6 6 13 6 21z"/></svg>';
+const PIN='<svg width="40" height="40" viewBox="0 0 24 24"><path fill="#9C7438" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
+const PHONE='<svg width="32" height="32" viewBox="0 0 24 24"><path fill="#120E0B" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.3z"/></svg>';
+document.querySelectorAll('.dot').forEach(d=>d.innerHTML=LEAF);
+const loc=document.getElementById('s5-loc'); loc.innerHTML=loc.innerHTML.replace('PIN',PIN);
+const lab=document.querySelector('#s5-tel .l'); lab.innerHTML=lab.innerHTML.replace('PHONE',PHONE);
+
+// deterministic particles
+const P=[];let seed=7;const rnd=()=>((seed=(seed*16807)%2147483647)/2147483647);
+const pc=document.getElementById('particles');
+for(let i=0;i<38;i++){const e=document.createElement('div');e.className='p a';const s=8+rnd()*26;
+  e.style.width=e.style.height=s+'px';pc.appendChild(e);
+  P.push({e,x:rnd()*1080,y:rnd()*1920,v:12+rnd()*30,ph:rnd()*6.28,a:.35+rnd()*.5});}
+
+// ---------- timeline (seconds) ----------
+const DUR=36;
+const SC={s1:[0,4.15],s2:[4.0,9.15],s3:[9.0,16.35],s4:[16.2,25.15],s5:[25.0,DUR+1]};
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const eo=x=>1-Math.pow(1-clamp(x),3);            // easeOutCubic
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=clamp(x);const c=1.4;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const $=id=>document.getElementById(id);
+
+// element in-animations: [id, start, dur, type]
+const IN=[
+ ['s1-logo',0.15,1.3,'zoom'],['s1-q',1.0,1.0,'up'],
+ ['s2-kicker',4.3,.8,'up'],['s2-title',4.5,1.4,'wipe'],['s2-rule',5.3,.9,'width'],['s2-sub',5.9,1.0,'up'],
+ ['s3-head',9.2,.8,'up'],['s3-title',9.3,1.2,'wipe'],
+ ['b1',9.9,.8,'left'],['b2',11.3,.8,'left'],['b3',12.6,.8,'left'],['b4',14.2,.8,'left'],
+ ['s4-card',16.4,1.1,'zoom'],['s4-name',18.6,1.1,'wipe'],['s4-rule',19.5,.9,'width'],
+ ['s4-from',20.4,.8,'up'],['s4-price',20.9,1.3,'wipe'],['s4-note',22.6,1.0,'up'],
+ ['s5-logo',25.2,1.1,'zoom'],['s5-brand',25.8,.8,'up'],['s5-soin',26.5,1.0,'wipe'],['s5-price',27.4,.9,'pop'],
+ ['s5-cta',28.6,1.2,'wipe'],['s5-loc',30.2,.8,'up'],['s5-tel',31.3,.9,'pop'],
+];
+// gold shimmer sweeps: [id, start]
+const SHINE=[['s2-title',6.2],['s3-title',10.6],['s4-name',19.8],['s4-price',22.3],['s4-price',24.0],['s5-soin',27.6],['s5-price .v',28.4],['s5-price .v',33.5]];
+
+function render(t){
+  // ambient
+  $('glow').style.transform=`translate(${Math.sin(t*.35)*60}px,${Math.cos(t*.27)*80}px) scale(${1+Math.sin(t*.5)*.05})`;
+  for(const p of P){const y=((p.y-t*p.v)%1920+1920)%1920;const x=p.x+Math.sin(t*.6+p.ph)*24;
+    p.e.style.transform=`translate(${x}px,${y}px)`;p.e.style.opacity=p.a*(.55+.45*Math.sin(t*1.7+p.ph));}
+  // scenes
+  for(const [id,[a,b]] of Object.entries(SC)){
+    const el=$(id); const fi=eo((t-a)/.45), fo=1-eio((t-(b-.45))/.45); const o=Math.min(fi,fo);
+    el.style.opacity=o; el.style.visibility=o<=0.001?'hidden':'visible';
+    const out=1-fo; el.style.filter=out>0?`blur(${out*14}px)`:'none';
+    el.style.transform=`scale(${1+out*0.06+ (1-fi)*0.03})`;
+  }
+  // elements
+  for(const [id,s,d,type] of IN){
+    const el=$(id); const x=(t-s)/d; const k=eo(x);
+    let tr='',op=clamp(x*1.6),cp='none';
+    if(type==='up'){tr=`translateY(${(1-k)*60}px)`;}
+    else if(type==='left'){tr=`translateX(${(1-k)*-120}px)`;}
+    else if(type==='zoom'){const b=back(x);tr=`scale(${.6+.4*b}) rotate(${(1-k)*-8}deg)`;}
+    else if(type==='pop'){const b=back(x);tr=`scale(${.7+.3*b})`;}
+    else if(type==='wipe'){const w=eio(x);cp=`inset(-20% ${100-w*100}% -20% -5%)`;op=clamp(x*3);tr=`translateY(${(1-k)*20}px)`;}
+    else if(type==='width'){tr=`scaleX(${k})`;op=clamp(x*2);}
+    el.style.transform=tr; el.style.opacity=op; el.style.clipPath=cp;
+  }
+  // logo sheen
+  const sp=clamp((t-1.2)/1.4); $('s1-sheen').style.left=(-40+sp*150)+'%';
+  // logo gentle float
+  $('s1-logo').style.transform+=` translateY(${Math.sin(t*1.3)*8}px)`;
+  $('s5-logo').style.transform+=` translateY(${Math.sin(t*1.3)*6}px)`;
+  // gold text shimmer
+  document.querySelectorAll('.gold,.goldOnDark').forEach(e=>e.style.backgroundPosition='100% 0');
+  for(const [sel,s] of SHINE){const e=document.querySelector('#'+sel);const x=clamp((t-s)/1.3);
+    if(x>0&&x<1) e.style.backgroundPosition=`${100-eio(x)*100}% 0`;}
+  // price glow pulse
+  const pr=$('s4-price'); const g=clamp((t-21.6)/1)*(.6+.4*Math.sin(t*2.4));
+  pr.style.filter=`drop-shadow(0 0 ${18*g}px rgba(255,220,150,${.55*g}))`;
+  // CTA button breathing
+  if(t>32.4){$('s5-tel').style.transform=`scale(${1+Math.sin((t-32.4)*3)*.025})`;}
+}
+window.render=render; window.DUR=DUR;
+
+// live preview mode: open ad.html?play (plays with audio if present)
+if(location.search.includes('play')){
+  const au=new Audio('output/soundtrack.m4a');const t0=performance.now();
+  document.body.addEventListener('click',()=>{au.currentTime=((performance.now()-t0)/1000)%DUR;au.play()});
+  (function loop(){const t=((performance.now()-t0)/1000)%DUR;render(t);requestAnimationFrame(loop)})();
+}else render(0);
+</script>
+</body>
+</html>
