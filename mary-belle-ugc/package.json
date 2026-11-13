@@ -1,0 +1,27 @@
+{
+  "name": "mary-belle-ugc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Publicité UGC + motion design — Mary Belle Cosmetics, soin Vajacial (Remotion)",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts MaryBelleVajacial renders/mary-belle-vajacial.mp4 --codec h264 --crf 18",
+    "render:nomusic": "remotion render src/index.ts MaryBelleVajacial renders/mary-belle-vajacial-sans-musique.mp4 --codec h264 --crf 18 --props '{\"music\":false}'",
+    "still": "remotion still src/index.ts MaryBelleVajacial renders/preview.png",
+    "srt": "node scripts/build-srt.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.543",
+    "@remotion/google-fonts": "4.0.543",
+    "@remotion/media": "4.0.543",
+    "@remotion/transitions": "4.0.543",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.543"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.8",
+    "typescript": "5.8.3"
+  }
+}
