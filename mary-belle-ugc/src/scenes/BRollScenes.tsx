@@ -133,18 +133,16 @@ export const ExplicationScene: React.FC<SceneProps> = ({ start, end }) => {
   ];
   return (
     <AbsoluteFill>
-      <Sequence durationInFrames={brollFrames + 8}>
+      <Sequence durationInFrames={brollFrames}>
         <BRollSequence
           shots={[
             { src: MEDIA.broll.visage, frames: visageFrames, move: "in", focus: "50% 35%" },
-            { src: MEDIA.broll.manucure, frames: brollFrames + 8 - visageFrames, move: "right" },
+            { src: MEDIA.broll.manucure, frames: brollFrames - visageFrames, move: "right" },
           ]}
         />
       </Sequence>
       <Sequence from={brollFrames}>
-        <FadeIn>
-          <TalkingHead globalStartFrame={f(thStart, fps)} zoomFrom={1.03} zoomTo={1.08} />
-        </FadeIn>
+        <TalkingHead globalStartFrame={f(thStart, fps)} zoomFrom={1.14} zoomTo={1.18} focus="50% 30%" />
       </Sequence>
       <AbsoluteFill style={{ alignItems: "flex-start", paddingTop: 300, paddingLeft: 60, gap: 22, flexDirection: "column" }}>
         {chips.map((c) => (
@@ -162,11 +160,6 @@ export const ExplicationScene: React.FC<SceneProps> = ({ start, end }) => {
       </Sequence>
     </AbsoluteFill>
   );
-};
-
-const FadeIn: React.FC<{ children: React.ReactNode; frames?: number }> = ({ children, frames = 8 }) => {
-  const frame = useCurrentFrame();
-  return <AbsoluteFill style={{ opacity: interpolate(frame, [0, frames], [0, 1], clamp) }}>{children}</AbsoluteFill>;
 };
 
 /** Illustration abstraite NON anatomique : ondes douces évoquant la peau. */

@@ -180,7 +180,7 @@ export const SignatureScene: React.FC<SceneProps & { tailFrames: number }> = ({ 
   const brandIn = enter(frame, fps, local(CUES.maryBelle3, start, fps) - 2, 15);
   return (
     <AbsoluteFill style={{ opacity: fadeOut, backgroundColor: "#000" }}>
-      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.06} zoomTo={1.0} focus="50% 30%" />
+      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.1} zoomTo={1.14} focus="46% 30%" />
       {/* Bandeau marque */}
       {/* Logo : zone libre à droite (porte sombre), jamais sur le visage */}
       <AbsoluteFill

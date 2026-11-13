@@ -24,10 +24,13 @@ export const KenBurns: React.FC<{ src: string; move?: Move; focus?: string }> = 
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
   const p = interpolate(frame, [0, durationInFrames], [0, 1], clamp);
-  const s = move === "out" ? 1.16 - 0.1 * p : 1.06 + 0.1 * p;
-  const tx = move === "left" ? 30 - 60 * p : move === "right" ? -30 + 60 * p : 0;
-  const ty = move === "up" ? 30 - 60 * p : 0;
-  const blur = interpolate(frame, [0, 10], [8, 0], clamp);
+  const s = move === "out" ? 1.18 - 0.08 * p : 1.09 + 0.08 * p;
+  // léger tremblement « caméra à la main » (déterministe)
+  const hx = Math.sin(frame / 23) * 5 + Math.sin(frame / 8.7) * 1.6;
+  const hy = Math.cos(frame / 19) * 4 + Math.sin(frame / 7.3) * 1.4;
+  const rot = Math.sin(frame / 31) * 0.18;
+  const tx = (move === "left" ? 24 - 48 * p : move === "right" ? -24 + 48 * p : 0) + hx;
+  const ty = (move === "up" ? 24 - 48 * p : 0) + hy;
   return (
     <AbsoluteFill style={{ overflow: "hidden", backgroundColor: "#1a1110" }}>
       <Img
@@ -37,8 +40,7 @@ export const KenBurns: React.FC<{ src: string; move?: Move; focus?: string }> = 
           height: "100%",
           objectFit: "cover",
           objectPosition: focus,
-          transform: `translate(${tx}px, ${ty}px) scale(${s})`,
-          filter: `blur(${blur}px) saturate(1.04)`,
+          transform: `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(${s})`,
         }}
       />
       <AbsoluteFill
@@ -55,7 +57,7 @@ export const KenBurns: React.FC<{ src: string; move?: Move; focus?: string }> = 
 export const BRollSequence: React.FC<{
   shots: { src: string; frames: number; move?: Move; focus?: string }[];
   crossfade?: number;
-}> = ({ shots, crossfade = 8 }) => {
+}> = ({ shots, crossfade = 0 }) => {
   let from = 0;
   return (
     <AbsoluteFill>

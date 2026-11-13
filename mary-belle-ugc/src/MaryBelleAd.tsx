@@ -4,6 +4,7 @@ import { AUDIO_MIX, COLORS, MEDIA, VIDEO } from "./config/brand";
 import { CUES, SCENES, SceneId } from "./config/timeline";
 import { Captions } from "./captions/Captions";
 import { Disclaimer } from "./components/Graphics";
+import { Grain } from "./components/Grain";
 import { CuriositeScene, EmotionScene, HookScene, PrixScene, SceneProps } from "./scenes/TalkingScenes";
 import { DecouverteScene, ExplicationScene, SavoirFaireScene, VajacialScene } from "./scenes/BRollScenes";
 import { SignatureScene, WhatsAppScene } from "./scenes/EndScenes";
@@ -23,28 +24,19 @@ const SCENE_COMPONENTS: Record<Exclude<SceneId, "signature">, React.FC<SceneProp
   whatsapp: WhatsAppScene,
 };
 
-/** Lueur champagne aux coupes (transition douce, sans dissoudre la voix). */
-const CutGlow: React.FC = () => {
-  const frame = useCurrentFrame();
-  const o = interpolate(frame, [0, 3, 10], [0, 0.55, 0], clamp);
-  return <AbsoluteFill style={{ backgroundColor: COLORS.champagne, opacity: o, pointerEvents: "none" }} />;
-};
-
 const SFX: { at: number; src: string; vol?: number }[] = [
   { at: CUES.lesFilles, src: MEDIA.sfx.pop },
   { at: CUES.vajacialQ - 0.05, src: MEDIA.sfx.pop },
-  { at: 10.05, src: MEDIA.sfx.whoosh },
-  { at: 14.25, src: MEDIA.sfx.whoosh },
-  { at: CUES.visage - 0.05, src: MEDIA.sfx.pop, vol: 0.6 },
+  { at: 10.05, src: MEDIA.sfx.whoosh, vol: 0.45 },
+    { at: CUES.visage - 0.05, src: MEDIA.sfx.pop, vol: 0.6 },
   { at: CUES.cheveux - 0.05, src: MEDIA.sfx.pop, vol: 0.6 },
   { at: CUES.ongles - 0.05, src: MEDIA.sfx.pop, vol: 0.6 },
   { at: CUES.zoneIntime - 0.1, src: MEDIA.sfx.shimmer, vol: 0.6 },
-  { at: 23.38, src: MEDIA.sfx.whoosh },
+  { at: 23.38, src: MEDIA.sfx.whoosh, vol: 0.45 },
   { at: CUES.nettoyage - 0.08, src: MEDIA.sfx.pop, vol: 0.6 },
   { at: CUES.exfoliation - 0.08, src: MEDIA.sfx.pop, vol: 0.6 },
   { at: CUES.hydratation - 0.08, src: MEDIA.sfx.pop, vol: 0.6 },
-  { at: 32.58, src: MEDIA.sfx.whoosh },
-  { at: CUES.prix - 0.05, src: MEDIA.sfx.shimmer },
+    { at: CUES.prix - 0.05, src: MEDIA.sfx.shimmer },
   { at: CUES.whatsapp - 0.15, src: MEDIA.sfx.notif },
   { at: 58.45, src: MEDIA.sfx.shimmer, vol: 0.7 },
 ];
@@ -57,7 +49,7 @@ export const MaryBelleAd: React.FC<AdProps> = ({ music }) => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
-      {SCENES.map((s, i) => {
+      {SCENES.map((s) => {
         const from = f(s.start);
         const dur = s.id === "signature" ? f(s.end) - from + tailFrames : f(s.end) - from;
         return (
@@ -67,11 +59,11 @@ export const MaryBelleAd: React.FC<AdProps> = ({ music }) => {
             ) : (
               React.createElement(SCENE_COMPONENTS[s.id], { start: s.start, end: s.end })
             )}
-            {i > 0 && <CutGlow />}
           </Sequence>
         );
       })}
 
+      <Grain />
       <Captions hiddenRanges={[[38.6, 41.97], [44.83, 999]]} />
       <Disclaimer />
 

@@ -15,7 +15,7 @@ export const HookScene: React.FC<SceneProps> = ({ start }) => {
   const { fps } = useVideoConfig();
   return (
     <AbsoluteFill>
-      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.12} zoomTo={1.02} focus="52% 30%" />
+      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.0} zoomTo={1.04} focus="52% 30%" />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 250 }}>
         <KineticTitle text="LES FILLES…" delay={local(CUES.lesFilles, start, fps)} stagger={6} size={120} />
         <GoldRule delay={local(CUES.lesFilles, start, fps) + 10} />
@@ -34,7 +34,7 @@ export const CuriositeScene: React.FC<SceneProps> = ({ start }) => {
   const ring = interpolate(frame - d, [0, 30], [0, 1], clamp);
   return (
     <AbsoluteFill>
-      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.02} zoomTo={1.09} focus="50% 32%" />
+      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.16} zoomTo={1.2} focus="50% 30%" />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 230 }}>
         <div style={{ position: "relative", opacity: p, transform: `scale(${0.7 + 0.3 * p})` }}>
           {/* halo élégant autour du mot */}
