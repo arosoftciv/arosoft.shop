@@ -72,7 +72,7 @@ export const MaryBelleAd: React.FC<AdProps> = ({ music }) => {
         );
       })}
 
-      <Captions hiddenRanges={[[44.83, 999]]} />
+      <Captions hiddenRanges={[[38.6, 41.97], [44.83, 999]]} />
       <Disclaimer />
 
       {/* AUDIO */}

@@ -94,8 +94,8 @@ export const PrixScene: React.FC<SceneProps> = ({ start }) => {
   const breathe = 1 + 0.018 * Math.sin(Math.max(0, frame - priceIn) / 7);
   return (
     <AbsoluteFill>
-      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.04} zoomTo={1.1} focus="50% 22%" />
-      <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 560 }}>
+      <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.0} zoomTo={1.05} focus="50% 20%" />
+      <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 1010 }}>
         <div
           style={{
             width: 900,
