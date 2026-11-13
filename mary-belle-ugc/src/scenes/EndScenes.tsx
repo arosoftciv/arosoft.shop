@@ -13,7 +13,15 @@ const local = (cue: number, start: number, fps: number) => Math.round((cue - sta
 
 const Brand: React.FC<{ size?: number; color?: string }> = ({ size = 1, color }) =>
   BRAND.logo ? (
-    <Img src={staticFile(BRAND.logo)} style={{ width: 520 * size, objectFit: "contain" }} />
+    <Img
+      src={staticFile(BRAND.logo)}
+      style={{
+        width: 520 * size,
+        height: 520 * size,
+        borderRadius: "50%",
+        boxShadow: `0 ${20 * size}px ${60 * size}px rgba(73,48,45,0.45), 0 0 0 ${3 * size}px rgba(201,164,106,0.55)`,
+      }}
+    />
   ) : (
     <Logotype size={size} color={color} />
   );
@@ -39,7 +47,7 @@ export const WhatsAppScene: React.FC<SceneProps> = ({ start }) => {
       <GoldDust count={26} seed={11} opacity={0.6} />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 210 }}>
         <div style={{ opacity: a(0), transform: `translateY(${(1 - a(0)) * 40}px)` }}>
-          <Brand size={1} />
+          <Brand size={BRAND.logo ? 0.62 : 1} />
         </div>
         <GoldRule delay={8} width={360} />
         <div
@@ -174,18 +182,25 @@ export const SignatureScene: React.FC<SceneProps & { tailFrames: number }> = ({ 
     <AbsoluteFill style={{ opacity: fadeOut, backgroundColor: "#000" }}>
       <TalkingHead globalStartFrame={Math.round(start * fps)} zoomFrom={1.06} zoomTo={1.0} focus="50% 30%" />
       {/* Bandeau marque */}
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 210 }}>
+      {/* Logo : zone libre à droite (porte sombre), jamais sur le visage */}
+      <AbsoluteFill
+        style={
+          BRAND.logo
+            ? { alignItems: "flex-end", paddingTop: 300, paddingRight: 34 }
+            : { alignItems: "center", paddingTop: 210 }
+        }
+      >
         <div
           style={{
             opacity: brandIn * (1 - endCard),
-            transform: `translateY(${(1 - brandIn) * 30}px)`,
-            background: "rgba(255,249,245,0.88)",
+            transform: `translateY(${(1 - brandIn) * 30}px) scale(${0.8 + 0.2 * brandIn})`,
+            background: BRAND.logo ? "transparent" : "rgba(255,249,245,0.88)",
             borderRadius: 36,
-            padding: "26px 48px",
-            border: `2px solid ${COLORS.gold}`,
+            padding: BRAND.logo ? 0 : "26px 48px",
+            border: BRAND.logo ? "none" : `2px solid ${COLORS.gold}`,
           }}
         >
-          <Brand size={0.75} />
+          <Brand size={BRAND.logo ? 0.4 : 0.75} />
         </div>
       </AbsoluteFill>
       <AbsoluteFill style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 420, opacity: 1 - endCard }}>
@@ -210,7 +225,7 @@ export const SignatureScene: React.FC<SceneProps & { tailFrames: number }> = ({ 
         }}
       >
         <GoldDust count={20} seed={21} opacity={0.6} />
-        <Brand size={1.15} />
+        <Brand size={BRAND.logo ? 1.1 : 1.15} />
         <GoldRule delay={speakFrames} width={380} />
         <div
           style={{

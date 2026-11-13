@@ -19,7 +19,7 @@ export const BRAND = {
   tagline: "Parce que chaque femme mérite de se sentir belle et bien dans sa peau",
   disclaimer: "Mise en scène publicitaire — personnage IA",
   /** Chemin (dans public/) d'un logo PNG/SVG. null = logotype typographique. */
-  logo: null as string | null,
+  logo: "logo/logo-rond.png" as string | null,
 } as const;
 
 export const COLORS = {

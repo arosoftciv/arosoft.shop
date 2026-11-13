@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Sequence, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { BRAND, COLORS, MEDIA } from "../config/brand";
 import { CUES } from "../config/timeline";
 import { BRollSequence } from "../components/BRoll";
@@ -64,17 +64,33 @@ export const DecouverteScene: React.FC<SceneProps> = ({ start, end }) => {
             textAlign: "center",
             background: "rgba(255,249,245,0.9)",
             borderRadius: 36,
-            padding: "34px 56px",
+            padding: BRAND.logo ? "28px 40px" : "34px 56px",
             border: `2px solid ${COLORS.gold}`,
             boxShadow: "0 24px 60px rgba(0,0,0,0.25)",
           }}
         >
-          <div style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 92, color: COLORS.brown, lineHeight: 1 }}>
-            Mary Belle
-          </div>
-          <div style={{ fontFamily: SANS, fontWeight: 600, fontSize: 30, letterSpacing: 14, color: COLORS.gold, marginTop: 8 }}>
-            COSMETICS
-          </div>
+          {BRAND.logo ? (
+            <Img
+              src={staticFile(BRAND.logo)}
+              style={{
+                width: 300,
+                height: 300,
+                borderRadius: "50%",
+                display: "block",
+                margin: "0 auto",
+                transform: `scale(${0.85 + 0.15 * b}) rotate(${(1 - b) * -8}deg)`,
+              }}
+            />
+          ) : (
+            <>
+              <div style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 92, color: COLORS.brown, lineHeight: 1 }}>
+                Mary Belle
+              </div>
+              <div style={{ fontFamily: SANS, fontWeight: 600, fontSize: 30, letterSpacing: 14, color: COLORS.gold, marginTop: 8 }}>
+                COSMETICS
+              </div>
+            </>
+          )}
           <div
             style={{
               marginTop: 22,
