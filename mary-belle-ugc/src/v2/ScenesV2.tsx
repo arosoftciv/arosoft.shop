@@ -670,12 +670,12 @@ export const S10Meritez: React.FC<SceneProps> = ({ start, end }) => {
   return (
     <AbsoluteFill>
       <VideoFill src={c.src} clipDur={c.dur} windowSec={end - start} focus="45% 30%" zoom={[1.0, 1.06]} />
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1000 }}>
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1090 }}>
         <KineticTitle
           text="Accordez-vous ce moment"
           delay={lf(cue("s10", "accordez"), start, fps) - 4}
           stagger={4}
-          size={80}
+          size={70}
           italic
           weight={500}
         />
