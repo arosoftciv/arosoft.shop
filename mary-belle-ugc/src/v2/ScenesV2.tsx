@@ -214,8 +214,8 @@ export const S01Intro: React.FC<SceneProps> = ({ start }) => {
   return (
     <AbsoluteFill>
       <TalkingClip src={V2_MEDIA.talkIntro} zoom={[1.0, 1.06]} />
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 250 }}>
-        <KineticTitle text="LE VAJACIAL" delay={t1 - 3} stagger={6} size={120} />
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1070 }}>
+        <KineticTitle text="LE VAJACIAL" delay={t1 - 3} stagger={6} size={110} />
         <GoldRule delay={t1 + 8} width={320} />
       </AbsoluteFill>
     </AbsoluteFill>
@@ -229,8 +229,10 @@ export const S02Accueil: React.FC<SceneProps> = ({ start, end }) => {
   return (
     <AbsoluteFill>
       <VideoFill src={c.src} clipDur={c.dur} windowSec={end - start} focus="55% 30%" />
-      <AbsoluteFill style={{ alignItems: "flex-end", paddingTop: 300, paddingRight: 40, gap: 18 }}>
+      <AbsoluteFill style={{ alignItems: "flex-end", paddingTop: 300, paddingRight: 40 }}>
         <RoundLogo size={230} delay={lf(cue("s02", "mary"), start, fps) - 4} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1130 }}>
         <Pill
           text={BRAND.location}
           delay={lf(cue("s02", "riviera"), start, fps) - 3}
@@ -249,18 +251,10 @@ export const S02Accueil: React.FC<SceneProps> = ({ start, end }) => {
 /* S03 — visage / cheveux / ongles : manucure puis produits (sans visage) */
 export const S03Visage: React.FC<SceneProps> = ({ start, end }) => {
   const { fps } = useVideoConfig();
-  const total = Math.round((end - start) * fps);
-  const cut = Math.round(total * 0.52);
-  const m = V2_MEDIA.clips.manucure;
   const p = V2_MEDIA.clips.produits;
   return (
     <AbsoluteFill>
-      <Sequence durationInFrames={cut}>
-        <VideoFill src={m.src} clipDur={m.dur} windowSec={cut / fps} />
-      </Sequence>
-      <Sequence from={cut}>
-        <VideoFill src={p.src} clipDur={p.dur} windowSec={(total - cut) / fps} from={6} />
-      </Sequence>
+      <VideoFill src={p.src} clipDur={p.dur} windowSec={end - start} zoom={[1.0, 1.1]} />
       <AbsoluteFill style={{ alignItems: "flex-start", paddingTop: 300, paddingLeft: 56, gap: 18, flexDirection: "column" }}>
         <Chip label="VISAGE" delay={lf(cue("s03", "visage"), start, fps) - 3} />
         <Chip label="CHEVEUX" delay={lf(cue("s03", "cheveux"), start, fps) - 3} />
@@ -401,9 +395,9 @@ const StepPill: React.FC<{ index: number; label: string; delay: number; icon: Re
       style={{
         position: "relative",
         width: 300,
-        height: 170,
+        height: 150,
         borderRadius: 30,
-        background: "rgba(255,249,245,0.94)",
+        background: "rgba(255,249,245,0.95)",
         border: `2px solid ${COLORS.gold}`,
         boxShadow: "0 16px 40px rgba(73,48,45,0.28)",
         display: "flex",
@@ -471,11 +465,11 @@ export const S06Etapes: React.FC<SceneProps> = ({ start, end }) => {
         </div>
         <GoldRule delay={6} width={300} />
       </AbsoluteFill>
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 420 }}>
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 360 }}>
         <div
           style={{
-            width: 620,
-            height: 620,
+            width: 960,
+            height: 960,
             borderRadius: 44,
             overflow: "hidden",
             border: `3px solid ${COLORS.gold}`,
@@ -487,7 +481,7 @@ export const S06Etapes: React.FC<SceneProps> = ({ start, end }) => {
           <OffthreadVideo src={staticFile(c.src)} muted playbackRate={rate} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </div>
       </AbsoluteFill>
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1075 }}>
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1150 }}>
         <div style={{ display: "flex", gap: 16 }}>
           {steps.map((st, i) => (
             <StepPill key={st.label} index={i + 1} label={st.label} icon={st.icon} delay={lf(st.t, start, fps) - 3} />
@@ -608,7 +602,7 @@ export const S09Prix: React.FC<SceneProps> = ({ start, end }) => {
   const hook = enter(frame, fps, 2, 15);
   return (
     <AbsoluteFill>
-      <VideoFill src={c.src} clipDur={c.dur} windowSec={end - start} />
+      <VideoFill src={c.src} clipDur={c.dur} windowSec={end - start} blur={22} from={2} />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 300, opacity: hook * (1 - pc) }}>
         <KineticTitle text="Pas besoin de vous ruiner" delay={lf(cue("s09", "pas"), start, fps) - 4} stagger={4} size={72} italic weight={500} />
       </AbsoluteFill>
