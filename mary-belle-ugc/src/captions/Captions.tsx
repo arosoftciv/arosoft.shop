@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { COLORS } from "../config/brand";
 import { SANS } from "../components/fonts";
-import { buildChunks } from "./captions";
+import { buildChunks, Word } from "./captions";
 import { clamp } from "../animations/motion";
 
 /**
@@ -10,14 +10,15 @@ import { clamp } from "../animations/motion";
  * `hiddenRanges` : plages (s) où les sous-titres sont masqués (écrans de fin
  * qui affichent déjà l'information en grand).
  */
-export const Captions: React.FC<{ hiddenRanges?: [number, number][]; bottom?: number }> = ({
+export const Captions: React.FC<{ hiddenRanges?: [number, number][]; bottom?: number; words?: Word[] }> = ({
   hiddenRanges = [],
   bottom = 470,
+  words,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const chunks = useMemo(() => buildChunks(), []);
+  const chunks = useMemo(() => buildChunks(4, 24, words), [words]);
 
   if (hiddenRanges.some(([a, b]) => t >= a && t < b)) return null;
   const chunk = chunks.find((c) => t >= c.start - 0.05 && t < c.end);

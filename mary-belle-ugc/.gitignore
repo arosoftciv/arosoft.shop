@@ -5,3 +5,5 @@ renders/*.png
 assets/images/candidates/
 assets/video/talking-head-omnihuman.mp4
 assets/images/v2/*.png
+public/video/v2/*.mp4
+!public/video/v2/pratique.mp4

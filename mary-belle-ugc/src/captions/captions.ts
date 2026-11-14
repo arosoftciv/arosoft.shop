@@ -7,8 +7,8 @@ const isTag = (t: string) => t.startsWith("[") || t.endsWith("]");
 const isPunct = (t: string) => /^[!?.…,;:]+$/.test(t);
 
 /** Mots réellement prononcés (balises de jeu et ponctuation isolée retirées). */
-export const spokenWords = (): Word[] => {
-  const raw = (wordsJson as { words: Word[] }).words;
+export const spokenWords = (rawWords?: Word[]): Word[] => {
+  const raw = rawWords ?? (wordsJson as { words: Word[] }).words;
   const out: Word[] = [];
   for (const w of raw) {
     if (isTag(w.text)) continue;
@@ -23,8 +23,8 @@ export const spokenWords = (): Word[] => {
 };
 
 /** Regroupe en lignes courtes lisibles sur smartphone. */
-export const buildChunks = (maxWords = 4, maxChars = 24): Chunk[] => {
-  const words = spokenWords();
+export const buildChunks = (maxWords = 4, maxChars = 24, rawWords?: Word[]): Chunk[] => {
+  const words = spokenWords(rawWords);
   const chunks: Chunk[] = [];
   let cur: Word[] = [];
   const flush = () => {
