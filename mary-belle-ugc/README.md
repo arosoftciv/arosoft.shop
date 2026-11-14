@@ -14,6 +14,7 @@ Vidéo verticale TikTok 1080 × 1920, 30 i/s, environ 60 s. Elle mêle un person
 | Effets sonores (pop, whoosh, scintillement, notification) | ✅ | ElevenLabs SFX v2 |
 | Images d'illustration (6 plans) | ✅ (16:9 recadré en 9:16) | Seedream 5 Pro |
 | Motion design, sous-titres, prix, écran WhatsApp, signature | ✅ | Remotion |
+| Extrait vidéo « pratique » (10 s, muet) dans la scène « Le Vajacial » | ✅ | Clip fourni par le client, recadré sans titre ni filigrane (`assets/video/video-pratique-source.mp4` → `public/video/pratique-10s.mp4`) |
 | **Personnage parlant lip-syncé** | ⏳ **en attente** | OmniHuman 1.5 (ElevenLabs) — crédits insuffisants |
 
 Tant que `MEDIA.talkingHead` vaut `null`, les plans du personnage affichent la photo fixe avec un filigrane **« APERÇU — LIP-SYNC EN ATTENTE »**. Ce rendu **n'est pas diffusable**.

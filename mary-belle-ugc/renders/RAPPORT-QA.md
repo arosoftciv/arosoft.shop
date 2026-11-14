@@ -26,7 +26,8 @@ Fichiers : `mary-belle-vajacial.mp4` · `mary-belle-vajacial-sans-musique.mp4` �
 | Mention personnage IA | ✅ | Permanente, en haut, lisible |
 | Images non présentées comme réelles | ✅ | Libellé « Images d'illustration » sur chaque plan illustratif |
 | Absence de promesse médicale | ✅ | « Soin esthétique » ; nettoyage, exfoliation douce, hydratation ; douceur, hygiène, confort ; aucune certification ni allégation de traitement |
-| Aucune nudité / geste intime | ✅ | Institut, cabine, produits, gants, esthéticienne ; illustration abstraite non anatomique |
+| Aucune nudité / geste intime | ⚠️ | Institut, cabine, produits, gants, esthéticienne. **Exception décidée par le client** : un extrait vidéo de 10 s en gros plan (extraction de points noirs avec une pince), dans la scène « Le Vajacial » |
+| Extrait vidéo pratique | ⚠️ | Fourni par le client, qui confirme avoir l'autorisation de l'utiliser en publicité (source : compte TikTok @djenzouu). Recadré pour retirer le titre incrusté et le filigrane ; son retiré ; 464 px agrandis à 620 px. À conserver : preuve de l'autorisation. L'image évoque l'extraction de comédons, ce qui peut se lire comme un soin de peau problématique : le texte reste « soin esthétique » |
 | Bouton CTA | ✅ | Bouton visuel, non présenté comme cliquable |
 | Texte de la voix-off | ✅ | Conforme au script (transcription Scribe) ; balises de jeu non prononcées |
 | Coupures vocales | ✅ | Aucune ; pauses naturelles de 0,36 à 0,58 s |

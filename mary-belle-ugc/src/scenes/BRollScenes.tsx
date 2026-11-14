@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Img, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { BRAND, COLORS, MEDIA } from "../config/brand";
 import { CUES } from "../config/timeline";
 import { BRollSequence } from "../components/BRoll";
@@ -186,64 +186,145 @@ const SkinWaves: React.FC = () => {
   );
 };
 
-/* SCÈNE 5 — LE VAJACIAL : définition + 3 cartes animées */
-export const VajacialScene: React.FC<SceneProps> = ({ start, end }) => {
+/** Pastille d'étape (compacte) sous la vidéo pratique. */
+const StepPill: React.FC<{ index: number; label: string; delay: number; icon: React.ReactNode }> = ({
+  index,
+  label,
+  delay,
+  icon,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const total = f(end - start, fps);
-  const first = f(CUES.nettoyage - 0.3 - start, fps);
-  const panel = interpolate(frame, [first - 6, first + 8], [0, 1], clamp);
-  const titleOut = interpolate(frame, [first - 8, first + 2], [1, 0], clamp);
+  const p = enter(frame, fps, delay, 13);
   return (
-    <AbsoluteFill>
-      <BRollSequence
-        shots={[
-          { src: MEDIA.broll.produits, frames: first, move: "out" },
-          { src: MEDIA.broll.cabine, frames: total - first, move: "up" },
-        ]}
-      />
-      {/* voile champagne pour les cartes */}
-      <AbsoluteFill
+    <div
+      style={{
+        position: "relative",
+        width: 300,
+        height: 170,
+        borderRadius: 30,
+        background: "rgba(255,249,245,0.94)",
+        border: `2px solid ${COLORS.gold}`,
+        boxShadow: "0 16px 40px rgba(73,48,45,0.28)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+        padding: "0 18px",
+        textAlign: "center",
+        opacity: p,
+        transform: `translateY(${(1 - p) * 50}px) scale(${0.88 + 0.12 * p})`,
+      }}
+    >
+      <div
         style={{
-          background: `linear-gradient(180deg, rgba(245,231,211,0.0) 0%, rgba(245,231,211,0.82) 25%, rgba(232,183,200,0.82) 100%)`,
-          opacity: panel,
+          position: "absolute",
+          top: -18,
+          left: -10,
+          width: 44,
+          height: 44,
+          borderRadius: "50%",
+          background: `linear-gradient(135deg, ${COLORS.goldLight}, ${COLORS.gold})`,
+          color: COLORS.brown,
+          fontFamily: SANS,
+          fontWeight: 800,
+          fontSize: 26,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
-      <AbsoluteFill style={{ opacity: panel }}>
-        <SkinWaves />
+      >
+        {index}
+      </div>
+      {icon}
+      <div style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 34, lineHeight: 1.1, color: COLORS.brown }}>{label}</div>
+    </div>
+  );
+};
+
+/* SCÈNE 5 — LE VAJACIAL : définition + extrait vidéo « pratique » (10 s) + 3 étapes */
+export const VajacialScene: React.FC<SceneProps> = ({ start }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const swapAt = f(CUES.nettoyage - 0.35 - start, fps);
+  const titleOpacity = interpolate(frame, [swapAt - 8, swapAt + 2], [1, 0], clamp);
+  const stepsOpacity = interpolate(frame, [swapAt - 2, swapAt + 8], [0, 1], clamp);
+  const cardIn = enter(frame, fps, 3, 16);
+  const clip = staticFile(MEDIA.pratique);
+  const steps = [
+    { label: "Nettoyage", cue: CUES.nettoyage, icon: <IconCleanse size={52} /> },
+    { label: "Exfoliation douce", cue: CUES.exfoliation, icon: <IconExfoliate size={52} /> },
+    { label: "Hydratation", cue: CUES.hydratation, icon: <IconHydrate size={52} /> },
+  ];
+  return (
+    <AbsoluteFill style={{ backgroundColor: COLORS.champagne }}>
+      {/* fond : le même extrait, flouté et voilé champagne/rose */}
+      <AbsoluteFill style={{ overflow: "hidden" }}>
+        <OffthreadVideo
+          src={clip}
+          muted
+          style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.3)", filter: "blur(36px) saturate(1.1)" }}
+        />
       </AbsoluteFill>
-      {/* Définition */}
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 300, opacity: titleOut }}>
-        <KineticTitle text="LE VAJACIAL" size={116} delay={2} stagger={6} />
+      <AbsoluteFill
+        style={{ background: "linear-gradient(180deg, rgba(245,231,211,0.88) 0%, rgba(232,183,200,0.82) 100%)" }}
+      />
+      <SkinWaves />
+
+      {/* Définition, puis « Le soin en 3 étapes » */}
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 215, opacity: titleOpacity }}>
+        <KineticTitle text="LE VAJACIAL" size={96} delay={2} stagger={6} color={COLORS.brown} />
         <GoldRule delay={12} width={300} />
         <div
           style={{
             fontFamily: SANS,
             fontWeight: 600,
-            fontSize: 44,
-            letterSpacing: 2,
-            color: COLORS.ivory,
+            fontSize: 36,
+            letterSpacing: 1.5,
+            color: COLORS.brown,
             textAlign: "center",
-            maxWidth: 820,
-            textShadow: "0 4px 18px rgba(0,0,0,0.45)",
+            maxWidth: 860,
             opacity: interpolate(frame, [16, 28], [0, 1], clamp),
           }}
         >
           Soin esthétique de la peau du maillot
         </div>
       </AbsoluteFill>
-      {/* Trois cartes */}
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 330, gap: 34, flexDirection: "column", perspective: 1200 }}>
-        <div style={{ fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: 64, color: COLORS.brown, opacity: panel }}>
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 240, opacity: stepsOpacity }}>
+        <div style={{ fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: 68, color: COLORS.brown }}>
           Le soin en 3 étapes
         </div>
-        <StepCard index={1} label="Nettoyage" delay={local(CUES.nettoyage, start, fps) - 3} icon={<IconCleanse />} />
-        <StepCard index={2} label="Exfoliation douce" delay={local(CUES.exfoliation, start, fps) - 3} icon={<IconExfoliate />} />
-        <StepCard index={3} label="Hydratation" delay={local(CUES.hydratation, start, fps) - 3} icon={<IconHydrate />} />
+        <GoldRule delay={swapAt} width={300} />
       </AbsoluteFill>
-      <Sequence durationInFrames={first}>
-        <IllustrativeTag />
-      </Sequence>
+
+      {/* Extrait vidéo pratique (muet) */}
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 430 }}>
+        <div
+          style={{
+            width: 620,
+            height: 620,
+            borderRadius: 44,
+            overflow: "hidden",
+            border: `3px solid ${COLORS.gold}`,
+            boxShadow: "0 30px 80px rgba(73,48,45,0.45)",
+            opacity: cardIn,
+            transform: `translateY(${(1 - cardIn) * 60}px) scale(${0.92 + 0.08 * cardIn})`,
+          }}
+        >
+          <OffthreadVideo src={clip} muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        </div>
+      </AbsoluteFill>
+
+      {/* Trois étapes, en synchro avec la voix */}
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 1080 }}>
+        <div style={{ display: "flex", gap: 16 }}>
+          {steps.map((st, i) => (
+            <StepPill key={st.label} index={i + 1} label={st.label} icon={st.icon} delay={local(st.cue, start, fps) - 3} />
+          ))}
+        </div>
+      </AbsoluteFill>
+      <IllustrativeTag />
     </AbsoluteFill>
   );
 };

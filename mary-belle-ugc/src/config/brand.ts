@@ -56,6 +56,8 @@ export const MEDIA = {
    */
   talkingHead: "video/talking-head.mp4" as string | null,
   characterStill: "character/reference.png",
+  /** Extrait vidéo « pratique » (10 s, muet, recadré sans titre ni filigrane). */
+  pratique: "video/pratique-10s.mp4",
   broll: {
     reception: "images/reception.jpg",
     cabine: "images/cabine.jpg",
